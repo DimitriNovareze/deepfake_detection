@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veille Techno : Vidéos Synthétiques & IA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+
+    <header>
+        <div class="container header-content">
+            <h1>Deepfake Watch</h1>
+            <nav>
+                <ul>
+                    <li><a href=#introduction> Introduction</a></li>
+                    <li><a href="#axe1">1. Artefacts GANs</a></li>
+                    <li><a href="#axe2">2. Physio (rPPG)</a></li>
+                    <li><a href="#axe3">3. C2PA & Traçabilité</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h2>Veille technologique sur les avancéestechnologiques dans la detection de Deepfake</h2>
+            <p>Ce tableau de bord réalise d'abord un état de l'art sur les méthode de détection des deepfake, puis centralise les dernières avancées en matière de détection d'authenticité, d'analyse biométrique et de standards de certification.</p>
+        </div>
+    </section>
+
+
+
+    <main class="container">
+        
+        <section id ="introduction" class="topic-section">
+            <div class=""section-title">
+            <h3> Introduction au sujet</h3></div>
+            <h4> definition : Un deepfake est une image, une vidéo ou une séquence audio qui a été modifiée ou fabriquée au moyen d'une technique (deepfake technology) de synthèse multimédia reposant sur l'intelligence artificielle (IA). (Wikipedia)</h4>
+            <div class="container">
+                <p>Les deepafakes sont de plus en plus présent sur les réseaux, leur présence ammene des problème éthique que nous pouvons résumer ainsi :
+                    - Les deepfakes peuvent être utilisés pour influencer le public sur des question politique. Des influenceurs peuvent avoir leur identité contournée
+                    et les personnes peuvent se servirent de l'influence de ces derniers pour partager des fausses informations.
+                    - Certains LLM permettent de dénuder certaines personnnes, nous avons notamment eu récemment le probleme avec Grok qui pouvait dénudé les personnes sans leur consentement.
+                    - Les deepfakes peuvent être utilisée pour réalisé de l'usurpation d'identité. 
+                Pour toutes ces raisons il est maintenant essentiel d'avoir des méthode robuste pour analyser les images et vidéos publier sur les réseaux
+                afin de connaitre s'ils proviennent d'une IA ou non. Cependant, les ai deviennent de plus en plus perfomantes au point qu'aujourd'hui, il devient difficile
+                de reconnaitre par un oeil humain si une vidéo a été généré par ia ou non ; heureusement de nombreuses méthodes emerge pour tenter de détecter ces derniers.
+                Dans ce document, je me propose de réaliser une veille technologique sur les avancées technologique sur les avancées dans la detection de deefake.
+                </p>
+            </div>
+        </section>
+        
+
+        
+        <section id="axe1" class="topic-section">
+            <div class="section-title">
+                <h3>Axe 1 : Analyse des Artefacts (GANs)</h3>
+                <span class="badge">Visuel</span>
+            </div>
+            <div class="cards-container">
+                <article class="card">
+                    <h4>Titre de l'article / Papier de recherche</h4>
+                    <p class="date">Date de publication</p>
+                    <p class="summary">Résumé de l'approche technique (ex: détection des fréquences spatiales)...</p>
+                    <a href="#" class="read-more">Lire la source</a>
+                </article>
+                
+                </div>
+        </section>
+
+        <hr>
+
+        <section id="axe2" class="topic-section">
+            <div class="section-title">
+                <h3>Axe 2 : Signaux Physiologiques (rPPG)</h3>
+                <span class="badge">Biométrie</span>
+            </div>
+            <div class="cards-container">
+                <article class="card">
+                    <h4>Titre de l'article / Découverte</h4>
+                    <p class="date">Date</p>
+                    <p class="summary">Explication de la méthode biométrique utilisée...</p>
+                    <a href="#" class="read-more">Lire la source</a>
+                </article>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="axe3" class="topic-section">
+            <div class="section-title">
+                <h3>Axe 3 : C2PA & Standards</h3>
+                <span class="badge">Industrie</span>
+            </div>
+            <div class="cards-container">
+                <article class="card">
+                    <h4>Titre de la norme / Initiative</h4>
+                    <p class="date">Date</p>
+                    <p class="summary">Détails sur le standard de filigranage ou la blockchain...</p>
+                    <a href="#" class="read-more">Lire la source</a>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Veille réalisée par Dimitri Novareze - <span id="currentYear"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
