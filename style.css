@@ -1,141 +1,302 @@
-/* Variables pour changer les couleurs facilement partout */
+/* ═══════════════════════════════════════════════════
+   DEEPFAKE WATCH — style.css
+   Direction : Vraie Revue Scientifique / Desktop-first
+   Texte justifié, pleine largeur, header épuré.
+═══════════════════════════════════════════════════ */
+
 :root {
-    --primary-color: #2c3e50; /* Bleu nuit pro */
-    --accent-color: #3498db;  /* Bleu vif */
-    --bg-color: #f4f7f6;      /* Gris très clair */
-    --card-bg: #ffffff;
-    --text-color: #333;
+    /* Palette minimaliste et académique */
+    --bg-page:     #ffffff;
+    --bg-alt:      #fbfbfb;
+    --text-main:   #111111;
+    --text-mid:    #333333;
+    --text-light:  #666666;
+    
+    --accent:      #0b3d91; /* Bleu institutionnel profond */
+    --border:      #e5e5e5;
+    --border-dark: #cccccc;
+
+    /* Typographie */
+    --serif:  'Source Serif 4', Georgia, "Times New Roman", serif;
+    --sans:   'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --mono:   'IBM Plex Mono', 'Courier New', monospace;
+
+    /* Pleine largeur exploitée */
+    --max-w:  1400px; 
 }
 
-/* Reset de base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 18px; scroll-behavior: smooth; } /* Police de base agrandie */
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
+    background: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--serif);
+    font-weight: 300;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Mise en page globale */
-.container {
-    max-width: 1100px;
+/* ── Layout ─────────────────────────────────────── */
+.wrap {
+    width: 92%;
+    max-width: var(--max-w);
     margin: 0 auto;
-    padding: 0 20px;
 }
 
-/* Header */
+/* ── Header (Refonte totale : épuré, blanc, pro) ── */
 header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1rem 0;
-    position: sticky; /* Le menu reste en haut quand on scrolle */
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.header-content {
+}.hdr-inner {
+    width: 92%;
+    max-width: var(--max-w);
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 20px 0;
 }
 
-nav ul {
-    list-style: none;
+.hdr-brand {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+.brand-title {
+    font-family: var(--sans);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
 }
 
-nav a:hover {
-    color: var(--accent-color);
+.brand-sub {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+    margin-top: 4px;
 }
 
-/* Hero Section */
-#hero {
+nav {
+    display: flex;
+    gap: 35px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 8px 0;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    color: var(--accent);
+}
+
+.nav-btn.active {
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+
+.hdr-meta { display: none; } /* Caché pour plus d'épure */
+
+/* ── Pages ──────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+/* ── En-tête de page (Titres géants, centrés) ───── */
+.page-header {
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 0 70px;
     text-align: center;
-    padding: 50px 0;
-    background: white;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #ddd;
 }
 
-/* Sections des Axes */
-.topic-section {
-    padding: 40px 0;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.page-label {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     margin-bottom: 20px;
 }
 
-.badge {
-    background-color: var(--accent-color);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: bold;
+.page-header h1 {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 1.15;
+    margin: 0 auto 24px;
+    max-width: 1200px;
 }
 
-/* Les Cartes (Articles) */
-.cards-container {
+.page-intro {
+    font-family: var(--sans);
+    font-size: 1.15rem;
+    color: var(--text-light);
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+    text-align: center; /* L'intro reste centrée */
+}
+
+/* ── Sections de contenu (Pleine largeur & Justifié) ── */
+.doc-section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.doc-section:last-child { border-bottom: none; }
+
+.doc-section h2 {
+    font-family: var(--sans);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+}
+
+.doc-section h3, .doc-section h4 {
+    font-family: var(--sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 32px 0 12px;
+}
+
+.sec-num {
+    color: var(--accent);
+    margin-right: 12px;
+}
+
+/* LE CŒUR DU CORRECTIF : TEXTE JUSTIFIÉ ET PLEINE LARGEUR */
+.doc-section p, 
+.doc-section ul, 
+.doc-section ol,
+.enjeu p,
+.why-item p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto; /* Coupe les mots proprement si besoin */
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    margin-bottom: 20px;
+    line-height: 1.85;
+    max-width: 100%; /* Exploite toute la largeur disponible */
+}
+
+/* ── Blockquote (Style article scientifique) ────── */
+blockquote {
+    margin: 40px 0;
+    padding: 0 0 0 30px;
+    border-left: 4px solid var(--accent);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* ── Grilles Pleine Largeur (Enjeux, Raisons, etc.) ── */
+.enjeux-list, .why-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive auto */
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px; /* Grand espacement pour aérer le texte justifié */
+    margin: 50px 0;
 }
 
-.card {
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    border-left: 4px solid var(--accent-color); /* Petite touche design */
-    transition: transform 0.2s;
+.enjeu h4 {
+    border-bottom: 1px solid var(--text-main);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
 }
 
-.card:hover {
-    transform: translateY(-5px); /* Monte un peu au survol */
-}
-
-.card h4 {
-    margin-bottom: 10px;
-    color: var(--primary-color);
-}
-
-.card .date {
-    font-size: 0.85rem;
-    color: #777;
-    margin-bottom: 10px;
-}
-
-.read-more {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--accent-color);
-    text-decoration: none;
-    font-weight: bold;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
+/* ── Grille Veille ──────────────────────────────── */
+.veille-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes très larges */
+    gap: 40px;
     margin-top: 40px;
-    background-color: var(--primary-color);
-    color: white;
+}
+
+.veille-item {
+    background: var(--bg-alt);
+    border-top: 3px solid var(--accent);
+    padding: 40px;
+}
+
+.veille-meta {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+/* ── Tables de données ──────────────────────────── */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+}
+
+.data-table th, .data-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.data-table th {
+    font-weight: 600;
+    color: var(--text-main);
+    border-bottom: 2px solid var(--text-main);
+}
+
+/* ── Footer ─────────────────────────────────────── */
+footer {
+    border-top: 1px solid var(--border);
+    padding: 50px 0;
+    margin-top: 100px;
+    background: var(--bg-page);
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Responsive Basique (Pour écrans plus petits) ─ */
+@media (max-width: 1100px) {
+    .enjeux-list, .why-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    .page-header h1 { font-size: 2.8rem; }
+}
+
+@media (max-width: 768px) {
+    .hdr-inner { flex-direction: column; gap: 20px; }
+    .enjeux-list, .why-grid, .veille-grid, .detection-grid { grid-template-columns: 1fr; }
+    .doc-section p { text-align: left; /* On désactive la justification sur mobile pour éviter les gros trous */ }
 }

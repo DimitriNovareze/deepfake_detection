@@ -1,117 +1,509 @@
 <!DOCTYPE html>
 <html lang="fr">
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veille Techno : Vidéos Synthétiques & IA</title>
+    <title>Deepfake Détection — Veille Technologique</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-
-
-    <header>
-        <div class="container header-content">
-            <h1>Deepfake Watch</h1>
-            <nav>
-                <ul>
-                    <li><a href=#introduction> Introduction</a></li>
-                    <li><a href="#axe1">1. Artefacts GANs</a></li>
-                    <li><a href="#axe2">2. Physio (rPPG)</a></li>
-                    <li><a href="#axe3">3. C2PA & Traçabilité</a></li>
-                </ul>
-            </nav>
+<header>
+    <div class="hdr-inner">
+        <div class="hdr-brand">
+            <span class="brand-title">Deepfake Détection</span>
+            <span class="brand-sub">Veille technologique — Détection des contenus synthétiques</span>
         </div>
-    </header>
-
-    <section id="hero">
-        <div class="container">
-            <h2>Veille technologique sur les avancéestechnologiques dans la detection de Deepfake</h2>
-            <p>Ce tableau de bord réalise d'abord un état de l'art sur les méthode de détection des deepfake, puis centralise les dernières avancées en matière de détection d'authenticité, d'analyse biométrique et de standards de certification.</p>
+        <nav>
+            <button class="nav-btn active" data-page="accueil">Accueil</button>
+            <button class="nav-btn" data-page="etat-art">État de l'art</button>
+            <button class="nav-btn" data-page="veille">Veille</button>
+        </nav>
+        <div class="hdr-meta">
+            <span id="currentDate"></span>
+            <span class="hdr-author">D. Novareze</span>
         </div>
-    </section>
+    </div>
+</header>
 
 
+<!-- ══════════════════════════════════════════
+     ACCUEIL
+══════════════════════════════════════════ -->
+<main id="page-accueil" class="page active">
 
-    <main class="container">
-        
-        <section id ="introduction" class="topic-section">
-            <div class=""section-title">
-            <h3> Introduction au sujet</h3></div>
-            <h4> definition : Un deepfake est une image, une vidéo ou une séquence audio qui a été modifiée ou fabriquée au moyen d'une technique (deepfake technology) de synthèse multimédia reposant sur l'intelligence artificielle (IA). (Wikipedia)</h4>
-            <div class="container">
-                <p>Les deepafakes sont de plus en plus présent sur les réseaux, leur présence ammene des problème éthique que nous pouvons résumer ainsi :
-                    - Les deepfakes peuvent être utilisés pour influencer le public sur des question politique. Des influenceurs peuvent avoir leur identité contournée
-                    et les personnes peuvent se servirent de l'influence de ces derniers pour partager des fausses informations.
-                    - Certains LLM permettent de dénuder certaines personnnes, nous avons notamment eu récemment le probleme avec Grok qui pouvait dénudé les personnes sans leur consentement.
-                    - Les deepfakes peuvent être utilisée pour réalisé de l'usurpation d'identité. 
-                Pour toutes ces raisons il est maintenant essentiel d'avoir des méthode robuste pour analyser les images et vidéos publier sur les réseaux
-                afin de connaitre s'ils proviennent d'une IA ou non. Cependant, les ai deviennent de plus en plus perfomantes au point qu'aujourd'hui, il devient difficile
-                de reconnaitre par un oeil humain si une vidéo a été généré par ia ou non ; heureusement de nombreuses méthodes emerge pour tenter de détecter ces derniers.
-                Dans ce document, je me propose de réaliser une veille technologique sur les avancées technologique sur les avancées dans la detection de deefake.
-                </p>
+    <div class="page-header">
+        <div class="wrap">
+            <p class="page-label">Introduction</p>
+            <h1>Détecter les contenus synthétiques générés par IA</h1>
+            <p class="page-intro">Les modèles génératifs produisent aujourd'hui des contenus visuels indiscernables à l'œil humain. Cette veille recense les avancées scientifiques et industrielles autour de leur détection, leurs enjeux éthiques et les standards émergents.</p>
+        </div>
+    </div>
+
+    <div class="wrap">
+
+        <section class="doc-section">
+            <h2><span class="sec-num">1.</span> Définition et nature des deepfakes</h2>
+            <p>Le terme <strong>deepfake</strong> est une contraction de <em>deep learning</em> et <em>fake</em>. Il désigne tout contenu multimédia — image, vidéo ou séquence audio — généré ou altéré par des algorithmes d'intelligence artificielle afin de paraître authentique.</p> 
+            <p> Le terme deepfake a été popularisé en 2017 par un utilisateur de Reddit, publiant des vidéos pornographique de celebrités généré par intelligence artificielle, mais son utilisation s'est répandue rapidement dans les médias et les recherches académiques.</p>
+            <p>La technologie repose principalement sur les <strong>réseaux antagonistes génératifs (GANs)</strong>, dans lesquels deux réseaux s'affrontent : un <em>générateur</em> qui produit des contenus synthétiques, et un <em>discriminateur</em> qui tente de les identifier comme faux. Leur compétition itérative aboutit à des contenus d'une fidélité croissante.</p>
+
+
+            <blockquote>
+                « Un deepfake est une image, une vidéo ou une séquence audio modifiée ou fabriquée au moyen d'une technique de synthèse multimédia reposant sur l'intelligence artificielle. »
+                <footer>Wikipedia / consensus académique</footer>
+            </blockquote>
+
+            <p>Depuis 2021, les <strong>modèles de diffusion</strong> (Stable Diffusion, DALL-E, Imagen) ont supplanté les GANs en qualité et en diversité. Leur signature statistique fondamentalement différente oblige les détecteurs à s'adapter constamment.</p>
+
+            <div class="tag-row">
+                <span class="tag">GANs</span>
+                <span class="tag">Autoencodeurs</span>
+                <span class="tag">Diffusion models</span>
+                <span class="tag">Face swap</span>
+                <span class="tag">Voice cloning</span>
+                <span class="tag">NeRF</span>
+                <span class="tag">LipSync</span>
+                <span class="tag">StyleGAN</span>
             </div>
         </section>
-        
 
+        <section class="doc-section">
+       <section class="doc-section">
+            <h2><span class="sec-num">2.</span> Architectures Génératives : Fondements Mathématiques et Scientifiques</h2>
+            <p>L'évolution technologique a basculé de simples méthodes de "shallow fakes" vers des architectures neuronales complexes. Pour comprendre les artefacts résiduels que les détecteurs exploitent, il est impératif de définir rigoureusement les modèles mathématiques de génération sous-jacents.</p>
+            
+            <h3>2.1 Auto-encodeurs (AE) et le "Face Swap" classique</h3>
+            <p>Le fondement des premiers outils de remplacement de visage (comme DeepFaceLab ou FakeApp) repose sur des réseaux d'auto-encodeurs. L'architecture comprend deux composantes : un encodeur $E$ qui compresse une image d'entrée $x$ dans un espace latent (un vecteur d'information de dimension réduite) $z = E(x)$, et un décodeur $D$ qui reconstruit l'image $\hat{x} = D(z)$.</p>
+            <p><strong>Le principe du Deepfake :</strong> Le modèle est entraîné en utilisant un <em>encodeur partagé</em> $E_{shared}$ pour deux sujets A et B. Ce goulot d'étranglement force le réseau à apprendre les caractéristiques universelles du visage (expressions, pose, éclairage) agnostiques à l'identité. En revanche, deux <em>décodeurs spécifiques</em> $D_A$ et $D_B$ sont entraînés pour reconstruire l'identité propre de chaque sujet. Pour générer un deepfake (placer le visage de A sur B), l'image de B est compressée via $E_{shared}$ pour extraire son expression temporelle, puis l'image est reconstruite via le décodeur $D_A$.</p>
+
+            <h3>2.2 StyleGAN : Désintrication de l'espace latent</h3>
+            <p>Les Réseaux Antagonistes Génératifs (GAN) reposent sur un jeu minimax à somme nulle entre un Générateur $G$ et un Discriminateur $D$. Les architectures traditionnelles injectent un vecteur de bruit aléatoire $z \in \mathcal{Z}$ directement dans la première couche convolutive, ce qui rend le contrôle des attributs visuels chaotique.</p>
+            <p><strong>L'innovation StyleGAN (NVIDIA) :</strong> StyleGAN modifie fondamentalement cette architecture en introduisant un réseau de <em>mapping</em> non linéaire (un perceptron multicouche à 8 couches). Ce réseau transforme $z$ en un vecteur latent intermédiaire $w \in \mathcal{W}$. Ce vecteur $w$ contrôle ensuite le générateur $G$ à différentes résolutions spatiales via des opérations de <strong>Normalisation Adaptative des Instances (AdaIN)</strong> (pour StyleGAN1) ou par modulation/démodulation des poids convolutifs (StyleGAN2).</p>
+            <p><em>Implication scientifique :</em> L'espace $\mathcal{W}$ est nettement moins intriqué que $\mathcal{Z}$. Mathématiquement, la variance de chaque dimension correspond à un attribut sémantique précis et isolé (pose, âge, pilosité) sans perturber les autres caractéristiques. C'est cette désintrication qui permet une synthèse totale d'un photoréalisme extrême.</p>
+
+            <h3>2.3 FSGAN (Face Swapping GAN)</h3>
+            <p>Le modèle FSGAN représente une rupture car il est indépendant du sujet : contrairement aux auto-encodeurs, il ne nécessite pas de phase de réentraînement longue et spécifique pour chaque nouvelle paire de visages.</p>
+            <p><strong>Architecture :</strong> FSGAN opère de manière séquentielle via plusieurs sous-réseaux spécialisés :</p>
+            <ol>
+                <li><strong>Reenactment Network :</strong> Génère le visage source ajusté selon l'expression, les repères faciaux et la pose du visage cible.</li>
+                <li><strong>Segmentation Network :</strong> Calcule les masques faciaux pour gérer les occlusions (comme les cheveux ou les mains passant devant le visage cible).</li>
+                <li><strong>Inpainting Network :</strong> Comble de manière heuristique les pixels manquants liés aux différences de géométrie entre les deux visages.</li>
+                <li><strong>Blending Network :</strong> Utilise une approximation neuronale de la <em>fusion de Poisson</em>. Ce réseau minimise le gradient de la différence entre l'image source et cible, intégrant le visage de manière photoréaliste tout en respectant l'éclairage natif de la vidéo.</li>
+            </ol>
+
+            <h3>2.4 Champs de Radiance Neuronaux (NeRF)</h3>
+            <p>Les <em>Neural Radiance Fields</em> (NeRF) ont révolutionné la synthèse de vues inédites et sont désormais couplés aux modèles de têtes parlantes. Contrairement aux GANs qui génèrent des matrices de pixels 2D, les NeRFs apprennent une <strong>représentation volumique continue en 3D</strong> de la scène.</p>
+            <p><strong>Mathématiques fondamentales :</strong> Un réseau MLP (Multi-Layer Perceptron), noté $F_\Theta$, prend en entrée une coordonnée spatiale 3D $\mathbf{x} = (x,y,z)$ et une direction de vue $\mathbf{d} = (\theta, \phi)$. Il prédit en sortie une couleur émise $\mathbf{c} = (R,G,B)$ et une densité volumique $\sigma$. Formellement : $F_\Theta : (\mathbf{x}, \mathbf{d}) \rightarrow (\mathbf{c}, \sigma)$.</p>
+            <p>Pour générer l'image 2D finale, le modèle utilise les principes du <em>rendu volumique</em> : l'algorithme lance des rayons virtuels à travers l'espace 3D et intègre numériquement les couleurs et densités le long de ces rayons. Dans le contexte des deepfakes, les NeRFs permettent de générer des visages d'une cohérence géométrique (pose de la tête) et lumineuse mathématiquement parfaite sous tous les angles, rendant inopérants les détecteurs basés sur les asymétries visuelles 2D.</p>
+
+      <h3>2.5 Modèles de Diffusion (Denoising Diffusion Probabilistic Models)</h3>
+        <p>Aujourd'hui considérés comme l'état de l'art de la génération visuelle, les modèles de diffusion reposent sur la thermodynamique hors équilibre et se décomposent en deux processus markoviens :</p>
         
-        <section id="axe1" class="topic-section">
-            <div class="section-title">
-                <h3>Axe 1 : Analyse des Artefacts (GANs)</h3>
-                <span class="badge">Visuel</span>
-            </div>
-            <div class="cards-container">
-                <article class="card">
-                    <h4>Titre de l'article / Papier de recherche</h4>
-                    <p class="date">Date de publication</p>
-                    <p class="summary">Résumé de l'approche technique (ex: détection des fréquences spatiales)...</p>
-                    <a href="#" class="read-more">Lire la source</a>
-                </article>
-                
+        <ol>
+            <li><strong>Processus de diffusion (Forward — La phase d'entraînement) :</strong> On part d'une image authentique $x_0$ à laquelle on ajoute itérativement un bruit gaussien $\mathcal{N}$ au fil de $T$ étapes de temps. Ce processus détruit progressivement le signal sémantique jusqu'à obtenir un bruit isotrope pur $x_T$. Le but de cette phase est de forcer l'IA à observer et cartographier la trajectoire mathématique exacte de cette destruction.</li>
+            
+            <li><strong>Processus de débruitage (Reverse — La phase de génération) :</strong> Un réseau de neurones (généralement une architecture U-Net avec mécanismes d'attention) apprend la trajectoire inverse. C'est ici que réside la rupture paradigmatique : lors de l'inférence (création d'une nouvelle image), <strong>le système ne modifie pas une image existante, il part d'un tenseur de bruit pur et totalement aléatoire</strong>. L'IA utilise alors les connaissances acquises lors du processus Forward pour "sculpter" ce chaos statistique. À chaque étape $t$, le réseau prédit et soustrait le bruit, faisant émerger itérativement une image inédite et cohérente. La fonction de perte (loss) minimise l'erreur quadratique entre le vrai bruit injecté $\epsilon$ et le bruit prédit $\epsilon_\theta(x_t, t)$.</li>
+        </ol>
+        
+        <p>Pour contourner les coûts computationnels prohibitifs d'un processus appliqué pixel par pixel, les <strong>Modèles de Diffusion Latente (LDMs)</strong> (comme Stable Diffusion ou Midjourney) appliquent ces opérations probabilistes à l'intérieur d'un <em>espace latent compressé</em> via un puissant auto-encodeur variationnel. Ils ne souffrent pas d'effondrement de mode (mode collapse) typique des GANs, offrant une diversité sémantique et une résolution fine qui mettent actuellement en échec la majorité des outils forensiques.</p>
+
+
+            <p>
+Cette veille technologique étant axée sur la détection, nous n'aborderons pas en détail les techniques de génération, mais il est essentiel de comprendre que chaque avancée dans la qualité et la diversité des contenus synthétiques représente un défi supplémentaire pour les méthodes de détection, qui doivent constamment évoluer pour suivre le rythme effréné de l'innovation dans ce domaine.
+
+Voici le lien d'une page github qui recence l'état de l'art des modèles de génération : <a href="https://github.com/flyingby/Awesome-Deepfake-Generation-and-Detection" target="_blank">github.com/flyingby/Awesome-Deepfake-Generation-and-Detection</a> </p>
+        </section>
+<section class="doc-section">
+            <h2><span class="sec-num">3.</span> Enjeux éthiques et sociétaux</h2>
+            <p>La popularisation des deepfakes soulève des problèmes éthiques dans plusieurs domaines.</p>
+
+            <h4>Manipulation politique</h4>
+            <p>Des déclarations fabriquées attribuées à des personnalités politiques peuvent influencer des élections ou provoquer des crises diplomatiques. La détection en temps réel constitue un enjeu démocratique. Il est important de noter que la manipulation politique par la modification d'image n'est pas nouvelle. 
+                En effet, les techniques de retouche d'image ont été utilisées à des fins de propagande et de manipulation politique bien avant l'avènement des deepfakes. Par exemple, pendant la Seconde Guerre mondiale, les images étaient souvent retouchées pour renforcer le moral ou pour déformer la réalité à des fins de propagande. Cependant, les deepfakes représentent une évolution significative en raison de leur capacité à créer des contenus visuels et audio extrêmement réalistes, rendant la détection plus difficile et amplifiant ainsi les risques de manipulation politique à grande échelle.
+            </p>
+            
+            <h4>Usurpation d'identité et fraude</h4>
+            <p>Le clonage de visage et de voix permet des fraudes financières sophistiquées. Les deepfakes peuvent être utilisés pour imiter des individus et obtenir des avantages économiques ou financiers illégitimes.</p>
+            
+            <h4>Contenus pornographiques non consentis</h4>
+            <p>La majorité des deepfakes en circulation sont des contenus à caractère sexuel non consentis : 96 % à 98 % selon le rapport 2023 de Security Hero.
+                 Le <em>deepfake porn</em> constitue une forme de violence de genre aux impacts psychologiques graves, documentés cliniquement. Récemment, l'intelligence artificielle du réseau social X, permettait de dénuder des personnes sans leur consentement : l'emergence de la mode "@grok put her in a bikini".
+                  Ces images peuvent attester de la violation de la vie privée et de l'identité et sont ainsi répréhensibles.</p>
+            <p>Par ailleurs, le nombre de signalements de contenus pédosexuels générés par IA a augmenté de 1 325 % en un an d'après le National Center for Missing & Exploited Children: Rapport 2024-2025.</p>
+            
+            <h4>Désinformation</h4>
+            <p>Les deepfakes amplifient la propagation de fausses nouvelles. L'effet pervers est double : les contenus compromettants authentiques peuvent désormais être niés en invoquant le doute sur leur origine.
+                Bien que les deepfakes soient souvent associés à la désinformation politique, ils sont également utilisés pour créer de fausses preuves dans des affaires judiciaires, ou pour diffuser de fausses informations sur des événements d'actualité, exacerbant ainsi la crise de confiance dans les médias et les institutions.
+                De plus, une information polémique a tendance à se diffuser plus rapidement que les corrections, et les deepfakes peuvent être exploités pour créer des contenus sensationnalistes qui attirent l'attention et se propagent largement, même s'ils sont rapidement démentis.
+            </p>
+            
+            <h4>Cadre réglementaire</h4>
+            <p>L'<strong>AI Act européen</strong> (entrée en vigueur août 2024) impose le marquage explicite des deepfakes à risque élevé. Plusieurs États américains ont criminalisé les deepfakes électoraux et les contenus pornographiques non consentis. La réponse juridique reste incomplète.</p>
+            
+            <h4>Confiance dans les preuves numériques</h4>
+            <p>La généralisation des deepfakes érode la confiance dans les preuves visuelles — pilier traditionnel du journalisme d'investigation, de la procédure judiciaire et de la mémoire collective.</p>
+        </section>
+
+        <section class="doc-section">
+            <h2><span class="sec-num">4.</span> Pourquoi la détection est essentielle</h2>
+            <p>La détection des deepfakes est un <strong>problème scientifique ouvert</strong> et un enjeu de sécurité nationale pour plusieurs gouvernements. Elle se heurte à une tension fondamentale : les outils de génération s'améliorent plus rapidement que les outils de détection.</p>
+            <p>Les modèles de détection <strong>peinent à généraliser</strong> : un détecteur performant sur StyleGAN2 peut tomber à 55 % de précision face à Stable Diffusion. Les post-traitements (compression JPEG, recadrage, filtres) dégradent par ailleurs les artefacts exploitables.</p>
+            <p>Deux stratégies complémentaires émergent : la <strong>détection forensique passive</strong>, qui analyse le contenu a posteriori, et la <strong>certification proactive</strong> (C2PA, SynthID), qui embeds dès la création une preuve d'authenticité ou d'origine synthétique.</p>
+
+            <div class="why-grid">
+                <div class="why-item">
+                    <span class="why-n">1</span>
+                    <div><strong>Intégrité de l'information</strong><p>Permettre aux journalistes et citoyens de vérifier l'authenticité d'un contenu avant diffusion.</p></div>
                 </div>
+                <div class="why-item">
+                    <span class="why-n">2</span>
+                    <div><strong>Cybersécurité</strong><p>Protéger organisations et individus contre les fraudes par clonage vocal et vidéo.</p></div>
+                </div>
+                <div class="why-item">
+                    <span class="why-n">3</span>
+                    <div><strong>Protection des personnes</strong><p>Identifier et supprimer les NCII sur les plateformes avant leur propagation massive.</p></div>
+                </div>
+                <div class="why-item">
+                    <span class="why-n">4</span>
+                    <div><strong>Procédure judiciaire</strong><p>Valider la recevabilité des preuves visuelles et vidéo dans les procédures légales.</p></div>
+                </div>
+
+            </div>
+
+            <p> Dans la partie état de l'art nous allons présenter plus en détail les avancées technologiques dans le domaine de la détection des deepfakes. Puis dans la partie veille, nous allons explorer les récentes developments dans ce domaine.</p>
         </section>
 
-        <hr>
+    </div>
+</main>
 
-        <section id="axe2" class="topic-section">
-            <div class="section-title">
-                <h3>Axe 2 : Signaux Physiologiques (rPPG)</h3>
-                <span class="badge">Biométrie</span>
-            </div>
-            <div class="cards-container">
-                <article class="card">
-                    <h4>Titre de l'article / Découverte</h4>
-                    <p class="date">Date</p>
-                    <p class="summary">Explication de la méthode biométrique utilisée...</p>
-                    <a href="#" class="read-more">Lire la source</a>
-                </article>
-            </div>
+
+
+
+<main id="page-etat-art" class="page">
+    <div class="page-header">
+        <div class="wrap">
+            <p class="page-label">Synthèse bibliographique et historique</p>
+            <h1>État de l'art de la détection des deepfakes</h1>
+            <p class="page-intro">Une analyse chronologique de la course aux armements entre les méthodes de génération synthétique et les architectures de détection forensique, des premiers défauts visuels aux modèles à base de graphes spatio-temporels.</p>
+        </div>
+    </div>
+
+    <div class="wrap">
+
+
+
+
+
+        <section class="doc-section">
+            <h2><span class=\"sec-num\">1.</span> Classification des manipulations audio-visuelles</h2>
+            <p>Les deepfakes ne sont pas monolithiques ; ils se segmentent en plusieurs catégories selon la modalité forgée et le niveau de manipulation. L'état de l'art identifie principalement:</p>
+            <ul class="limit-list">
+                <li><strong>Face-Swap (Échange d'identité) :</strong> Remplacement du visage de la personne source par celui d'une cible.</li>
+                <li><strong>Lip-synching (Synchronisation labiale) :</strong> Modification des mouvements de la bouche pour les rendre cohérents avec un enregistrement audio arbitraire.</li>
+                <li><strong>Puppet-master (Réenactment facial) :</strong> Mimétisme complet des expressions, mouvements oculaires et de la tête d'un acteur source vers une cible.</li>
+                <li><strong>Synthèse totale :</strong> Génération de visages photoréalistes de personnes inexistantes via des modèles comme StyleGAN.</li>
+                <li><strong>Audio Deepfakes :</strong> Clonage de voix par synthèse de texte (TTS) ou conversion vocale (VC).</li>
+            </ul>
         </section>
 
-        <hr>
+        <section class="doc-section">
+            <h2><span class=\"sec-num\">2.</span> Mécanismes de Génération : Du Deep Learning aux GANs</h2>
+            <p>L'évolution technologique a basculé de simples méthodes de montage basique vers des architectures neuronales complexes.</p>
+            
+            <h3>L'architecture Encodeur-Décodeur</h3>
+            <p>Le fondement des premiers outils populaires (FakeApp, FaceSwap) repose sur deux paires d'encodeurs-décodeurs entraînés à reconstruire les visages source et cible. En échangeant les décodeurs après l'entraînement, le système génère le visage de la cible avec les expressions de la source.</p>
 
-        <section id="axe3" class="topic-section">
-            <div class="section-title">
-                <h3>Axe 3 : C2PA & Standards</h3>
-                <span class="badge">Industrie</span>
-            </div>
-            <div class="cards-container">
-                <article class="card">
-                    <h4>Titre de la norme / Initiative</h4>
-                    <p class="date">Date</p>
-                    <p class="summary">Détails sur le standard de filigranage ou la blockchain...</p>
-                    <a href="#" class="read-more">Lire la source</a>
-                </article>
-            </div>
+            <h3>La domination des Réseaux Adversaires Génératifs (GAN)</h3>
+            <p>Les modèles récents (FSGAN, StyleGAN2) utilisent des discriminateurs temporels et des modules d'attention pour améliorer la qualité sémantique et la cohérence des vidéos. Ces approches permettent désormais des manipulations en temps réel (jusqu'à 30 fps) sans nécessiter un entraînement spécifique à chaque identité.</p>
         </section>
 
-    </main>
+        <section class="doc-section">
+            <h2><span class=\"sec-num\">3.</span> Stratégies de Détection : Signaux Biologiques et Artefacts (2017 - 2019)</h2>
+            <p>Les méthodes de détection se divisent en deux grandes familles : celles basées sur les artefacts (spatiaux ou temporels) et les approches purement pilotées par les données (Data-driven).</p>
 
-    <footer>
-        <p>Veille réalisée par Dimitri Novareze - <span id="currentYear"></span></p>
-    </footer>
+            <h3>Analyse des incohérences spatiales et temporelles</h3>
+            <p>Les détecteurs forensiques traquent les erreurs laissées par le processus de génération:</p>
+            <ul class="limit-list">
+                <li><strong>Incohérences physiologiques :</strong> Absence de clignements d'yeux naturels ou anomalies dans les signaux biologiques comme le rythme cardiaque (rPPG).</li>
+                <li><strong>Artefacts spatiaux :</strong> Différences de poses de tête 3D, anomalies dans les reflets oculaires ou la texture des dents.</li>
+                <li><strong>Défauts temporels :</strong> Manque de cohérence entre les images adjacentes (flickering, jitter) ou désynchronisation entre les phonèmes audio et les visèmes visuels.</li>
+            </ul>
 
-    <script src="script.js"></script>
+              <p> Voici le lien vers un article retracant l'évolution de ces techniques jusqu'à 2021: <a href="https://ui.adsabs.harvard.edu/abs/2021arXiv210300484M/abstract" target="_blank">L'évolution des méthodes de détection de deepfakes</a></p>
+       
+        </section>
+
+        <section class="doc-section">
+            <h2><span class="sec-num">4.</span> L'avènement du Deep Learning statique (2019–2021)</h2>
+            <div class="method-label">CNN & Apprentissage Supervisé</div>
+            <p>Face à l'amélioration visuelle des deepfakes, la communauté scientifique a basculé vers l'extraction de caractéristiques via les <strong>Réseaux de Neurones Convolutifs (CNN)</strong> comme XceptionNet, ResNet ou EfficientNet. L'objectif n'était plus de coder des règles manuelles (ex: chercher un clignement), mais de laisser le réseau apprendre seul à différencier un visage réel d'un visage manipulé (classification binaire frame par frame).</p>
+            <p>Cette ère a été propulsée par la sortie de datasets de référence comme <strong>FaceForensics++</strong>. Les modèles analysaient la texture spatiale des images pour repérer les traces de manipulation au niveau des pixels, invisibles à l'œil nu.</p>
+            <div class="note-block">
+                <strong>Limites :</strong> Le problème majeur de cette génération de détecteurs fut le <strong>surapprentissage</strong>. Les modèles devenaient extrêmement performants (souvent >95% de précision) sur les données spécifiques sur lesquelles ils avaient été entraînés, mais s'effondraient complètement lorsqu'ils étaient testés sur des vidéos générées par une méthode inconnue (faible généralisation <em>cross-dataset</em>).
+            </div>
+
+            <p> Voici le lien vers un article retracant l'évolution de ces techniques jusqu'à 2021: <a href="https://ui.adsabs.harvard.edu/abs/2021arXiv210300484M/abstract" target="_blank">L'évolution des méthodes de détection de deepfakes</a></p>
+        </section>
+
+   <section class="doc-section">
+            <h2><span class="sec-num">5.</span> Analyse fréquentielle et signaux faibles (2020–2022)</h2>
+            <div class="method-label">Transformée de Fourier & DCT</div>
+            
+            <p>Pour contourner la fragilité des CNN face aux altérations spatiales, les chercheurs ont exploité une faille structurelle des générateurs. Les GANs utilisent des convolutions transposées (deconvolutions) pour la phase d'<em>upsampling</em> (augmentation de la résolution). Si le pas (stride) et la taille du noyau ne sont pas parfaitement divisibles, cela crée un chevauchement irrégulier des pixels connu sous le nom d'<strong>artefact en damier</strong>.</p>
+            
+            <p>Si ces artefacts sont invisibles dans le domaine spatial, ils créent des périodicités flagrantes dans le <strong>domaine fréquentiel</strong>. Les détecteurs intègrent donc la Transformée en Cosinus Discrète (DCT) 2D :</p>
+            
+            <p>$$ X_{k,l} = \sum_{n=0}^{N-1} \sum_{m=0}^{M-1} x_{n,m} \cos\left[\frac{\pi}{N}\left(n+\frac{1}{2}\right)k\right] \cos\left[\frac{\pi}{M}\left(m+\frac{1}{2}\right)l\right] $$</p>
+            
+            <p>L'analyse spectrale révèle que les images réelles possèdent une décroissance d'énergie naturelle dans les hautes fréquences, tandis que les deepfakes présentent des pics d'amplitude anormaux aux fréquences correspondant à la taille des noyaux de convolution du générateur. Cette approche offre une grande robustesse face aux transformations spatiales comme la compression JPEG ou le flou.</p>
+        </section>
+   <section class="doc-section">
+            <h2><span class="sec-num">6.</span> La révolution Spatio-Temporelle et Biométrique (2021–2023)</h2>
+            <div class="method-label">Dynamique vidéo & Physiologie (rPPG)</div>
+            
+            <p>Un deepfake vidéo n'est pas qu'une image fixe : c'est une séquence temporelle. La génération suivante de détecteurs exploite les incohérences dynamiques via des architectures hybrides (CNN + LSTM/RNN). Contrairement aux CNN classiques, un réseau récurrent (RNN) maintient un état caché $h_t = f(W_x x_t + W_h h_{t-1} + b)$ qui accumule la "mémoire" des images précédentes, permettant de pénaliser mathématiquement le scintillement inter-frames (temporal jittering).</p>
+            
+            <p>Cette phase a surtout vu l'émergence de la <strong>biométrie physiologique via rPPG (Photopléthysmographie à distance)</strong>. La peau humaine agit comme un filtre optique : l'absorption de la lumière varie à chaque battement cardiaque en fonction du volume d'hémoglobine.</p>
+            
+            <p><strong>Modélisation de la rPPG :</strong> Pour extraire ce signal depuis une simple webcam RGB, les algorithmes utilisent le modèle POS (Plane-Orthogonal-to-Skin). En définissant $C(t)$ comme la variation temporelle moyenne des pixels du visage, le signal pulsatile $S(t)$ est isolé des variations d'éclairage en projetant les canaux RGB sur un plan chromatique spécifique :</p>
+            <p>$$ S(t) = C_1(t) + \alpha C_2(t) \quad \text{où} \quad C_1 = R-G, \;\; C_2 = R+G-2B $$</p>
+            
+            <p>Les générateurs (même performants spatialement) peinent à simuler cette équation d'optique biomédicale sur l'ensemble d'une séquence. L'absence de signal de perfusion cohérent dans le spectre (autour de 1 à 2 Hz, soit 60 à 120 BPM) devient un puissant classifieur de falsification. Bien que prometteuses, ces méthodes restent limitées par le rapport signal/bruit (SNR) souvent dégradé par les mouvements brusques de la tête.</p>
+        </section>
+
+       <section class="doc-section">
+            <h2><span class="sec-num">7.</span> Les architectures d'avant-garde (2023–2026)</h2>
+            <div class="method-label">Transformers, Graphes & Multimodalité</div>
+            
+            <p>Avec l'arrivée des modèles de Diffusion et des NeRFs, la détection a dû adopter des paradigmes mathématiques complexes capables de capter un contexte global et non plus seulement local.</p>
+            
+            <h3>6.1 Vision Transformers et Graphes Dynamiques (STGT)</h3>
+            <p>Dépassant les grilles de pixels rigides des CNN, des modèles comme le <strong>Spatio-Temporal Graph Transformer (STGT)</strong> modélisent le visage comme un graphe $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. Les nœuds $\mathcal{V}$ représentent 468 points de repère faciaux. Les arêtes $\mathcal{E}$ mesurent les dépendances spatiales et temporelles calculées par l'équation du <strong>flux optique</strong> (ex: algorithme de Lucas-Kanade) : $\frac{\partial I}{\partial x}V_x + \frac{\partial I}{\partial y}V_y + \frac{\partial I}{\partial t} = 0$.</p>
+            
+            <p>L'IA utilise ensuite un <em>mécanisme d'Attention</em> (Transformers) pour calculer dynamiquement quelles parties du graphe sont incohérentes :</p>
+            <p>$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V $$</p>
+            <p>Cette équation permet au modèle de concentrer son "attention" sur d'infimes désynchronisations (ex: le ratio d'ouverture de la bouche $Q$ par rapport au mouvement de la mâchoire $K$) sans être trompé par les mouvements de tête globaux de la vidéo.</p>
+
+            <h3>6.2 Fusion Spatio-Temporelle (STFF) et Benchmarks</h3>
+            <p>La tendance actuelle est à la multimodalité (Spatio-Temporal Feature Fusion - STFF). Les vecteurs d'extraction spatiale (RGB/DCT) et physiologiques (rPPG) sont concaténés et optimisés via des fonctions de perte contrastives. Ces architectures ultra-paramétrées sont désormais évaluées sur des corpus colossaux comme <strong>GenVidBench</strong> (6,78 millions de vidéos générées par 11 modèles de fondation comme Sora ou Kling), testant ainsi leur capacité à généraliser mathématiquement sur des espaces latents de génération totalement inconnus lors de l'entraînement.</p>
+        </section>
+
+
+        <section class="doc-section">
+            <h2><span class="sec-num">8.</span> De la Détection Passive à la Traçabilité Proactive (C2PA & Watermarking)</h2>
+            <div class="method-label">Cryptographie & Stéganographie Neuronale</div>
+            
+            <p>Face à la course aux armements asymétrique où les générateurs finissent toujours par contourner les détecteurs forensiques, l'industrie et la recherche opèrent un changement de paradigme. L'objectif n'est plus seulement de détecter les falsifications <em>a posteriori</em>, mais de garantir l'authenticité et la provenance d'un média <strong>dès sa création</strong>, à travers des protocoles cryptographiques et stéganographiques.</p>
+            
+            <h3>8.1 Provenance cryptographique : Le standard C2PA</h3>
+            <p>La Coalition for Content Provenance and Authenticity (C2PA) propose un standard ouvert liant mathématiquement un média à son historique de création via des métadonnées sécurisées. Au lieu de chercher des artefacts visuels, le C2PA repose sur une <strong>Infrastructure à Clés Publiques (PKI)</strong>.</p>
+            
+            <p><strong>Mécanisme mathématique :</strong> Lorsqu'une image $M$ est capturée (par un appareil photo certifié) ou générée (par une IA conforme), un <em>manifeste</em> contenant les informations d'origine est créé. Une fonction de hachage robuste calcule l'empreinte du fichier $H(M)$. Le créateur (ou le logiciel) signe ensuite cette empreinte avec sa clé privée $K_{priv}$, générant une signature numérique $\sigma$ :</p>
+            <p>$$ \sigma = \text{Sign}(K_{priv}, H(M)) $$</p>
+            <p>Toute modification ultérieure des pixels modifie l'empreinte de hachage $H(M')$, brisant ainsi la signature et alertant instantanément les plateformes (vérification via $K_{pub}$) que le média a été altéré ou dépouillé de son contexte d'origine.</p>
+
+            <h3>8.2 Tatouage numérique invisible : L'approche SynthID</h3>
+            <p>Les métadonnées (même cryptées) peuvent être volontairement effacées lors du traitement des fichiers. Pour pallier cette vulnérabilité, des technologies comme <strong>SynthID (Google DeepMind)</strong> intègrent un filigrane (watermark) imperceptible directement dans les pixels ou l'espace latent de l'image, du texte ou de l'audio.</p>
+            
+            <p><strong>Stéganographie neuronale :</strong> Contrairement aux filigranes traditionnels ajoutés en post-traitement, SynthID modifie les probabilités lors du processus de génération lui-même. Mathématiquement, le modèle de tatouage résout un problème d'optimisation complexe visant à intégrer un message binaire $w$ dans une image $x$ pour obtenir $x_w$, tout en minimisant une fonction de perte jointe :</p>
+            <p>$$ \mathcal{L} = \mathcal{L}_{\text{perceptuelle}}(x, x_w) + \lambda \mathcal{L}_{\text{décodage}}(w, \hat{w}) $$</p>
+            <p>La pénalité perceptuelle (souvent mesurée par LPIPS - <em>Learned Perceptual Image Patch Similarity</em>) garantit que la modification est invisible à l'œil humain. L'encodeur disperse le signal $w$ sur les basses fréquences (résistantes à la compression JPEG) et les hautes fréquences, rendant le tatouage robuste aux recadrages, aux filtres colorimétriques et à la compression agressive.</p>
+
+            <h3>8.3 Limites techniques, Régulation et "Analog Hole"</h3>
+            <p>Si ces méthodes proactives représentent actuellement la défense la plus solide, elles font face à des limites techniques et législatives majeures :</p>
+            
+            <ul class="limit-list">
+                <li><strong>La faille de la "Faille Analogique" (Analog Hole) :</strong> Prendre en photo un écran affichant un deepfake généré par IA, ou l'enregistrer via une capture vidéo, détruit instantanément les métadonnées C2PA et altère gravement les tatouages numériques comme SynthID, rendant le média indétectable par ces systèmes.</li>
+                <li><strong>Le problème de l'Open Source :</strong> La viabilité du marquage proactif repose sur la coopération des développeurs d'IA. Or, les modèles génératifs en libre accès (Open Weights) peuvent être recompilés par des acteurs malveillants après avoir volontairement amputé le module d'intégration de filigrane ou de C2PA.</li>
+                <li><strong>Cadre Réglementaire :</strong> Des législations pionnières, telles que l'<strong>AI Act de l'Union Européenne</strong> et les <em>Executive Orders</em> aux États-Unis, imposent désormais que les contenus générés par des systèmes d'IA à haut risque soient "lisibles par machine" comme étant artificiels. Cependant, la loi peine à imposer un standard technologique unique (C2PA vs Watermarking propriétaire), ralentissant l'interopérabilité entre les plateformes de réseaux sociaux.</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2><span class="sec-num">9.</span> Problèmes ouverts et limites actuelles</h2>
+            <div class="method-label">Les défis de demain</div>
+            <p>Malgré ces avancées scientifiques majeures, la communauté forensique fait face à des obstacles systémiques persistants :</p>
+            
+            <ul class="limit-list">
+                <li><strong>Le mur de la généralisation "Cross-Generator" :</strong> C'est le défi numéro un. Les recherches sur GenVidBench prouvent qu'un détecteur très performant sur les vidéos d'un générateur A voit souvent sa précision chuter brutalement (parfois sous les 60%) s'il est confronté aux vidéos d'un générateur B inédit. Les détecteurs peinent à extraire une définition universelle du "faux".</li>
+                <li><strong>Une course de plus en plus inégale :</strong> Une étude empirique récente alerte sur le retard de la détection face à la génération (Diffusion, NeRF). Fait notable : l'œil humain — particulièrement celui d'utilisateurs familiers avec l'IA — parvient aujourd'hui à mieux déceler les deepfakes modernes que certains algorithmes sur-entraînés, en détectant des incohérences sémantiques ou physiques globales que la machine ignore.</li>
+                <li><strong>La question des biais algorithmiques :</strong> Si les générateurs peuvent perpétuer des biais, les détecteurs s'avèrent paradoxalement équitables sur un point précis. Des études récentes ont prouvé que les détecteurs d'images ne présentent pas de biais systématique de détection basé sur l'âge, le genre ou l'ethnie, car ils traquent des anomalies statistiques de bas niveau (pixels, fréquences) décorrélées des phénotypes humains.</li>
+                <li><strong>Attaques adversaires et post-traitement :</strong> L'ajout intentionnel de bruit, le redimensionnement, ou le ré-encodage agressif d'une vidéo manipulée restent des moyens efficaces pour "laver" les traces algorithmiques et contourner la majorité des détecteurs actuels.</li>
+            </ul>
+        </section>
+
+    </div>
+</main>
+<!-- ══════════════════════════════════════════
+     VEILLE
+══════════════════════════════════════════ -->
+<main id="page-veille" class="page">
+    <div class="page-header">
+        <div class="wrap">
+            <p class="page-label">Veille Scientifique</p>
+            <h1>Dernières publications académiques</h1>
+            <p class="page-intro">Analyse critique des derniers articles de recherche (2025-2026) repoussant les limites de la détection forensique.</p>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="veille-grid">
+
+            <article class="doc-section veille-item">
+                <h2>1. STGT: Spatio-Temporal Graph Transformer</h2>
+                <div class="veille-meta">A. Pandey, A. Solanki (Signal, Image and Video Processing, 2026)</div>
+                
+                <h4>Résumé</h4>
+                <p>Cet article propose une nouvelle architecture de réseau de neurones modélisant les visages non pas comme une grille de pixels, mais comme un graphe de 468 nœuds dynamiques interconnectés temporellement via le flux optique.</p>
+                
+                <h4>Intérêt pour la détection</h4>
+                <p>En utilisant un "Attention pooling" adaptatif, l'algorithme identifie quelles régions du visage sont incohérentes (ex: désynchronisation labiale) sans être trompé par les filtres ou les mouvements de tête naturels. Il atteint un score AUC de 0.99 sur les environnements standards.</p>
+
+                <h4>Limites identifiées</h4>
+                <p>L'efficacité du modèle repose fortement sur l'extraction initiale correcte des points de repères faciaux. Les occlusions sévères ou les deepfakes de profil extrême pourraient dégrader la structure du graphe.</p>
+                
+                <p class="source-ref">Source : <a href="https://link.springer.com/article/10.1007/s11760-026-05191-y" target="_blank">STGT: Spatio-Temporal Graph Transformer for Deepfake Detection</a></p>
+            </article>
+
+
+
+
+            <article class="veille-item">
+                <h2>Orthogonal Subspace Decomposition for Generalizable AI-Generated Image Detection</h2>
+                <div class="veille-meta">Z. Yan et al. (arXiv, 2025)</div>
+                
+                <h4>Résumé</h4>
+                <p>Cet article s'attaque au problème fondamental de la généralisation des détecteurs d'images synthétiques (AIGI). Les auteurs mettent en évidence un « phénomène d'asymétrie » : les modèles de détection classiques ont tendance à surapprendre des motifs de falsification (artefacts) très spécifiques à leurs données d'entraînement. Cet apprentissage biaisé restreint drastiquement l'expressivité de leur espace de caractéristiques, les rendant quasiment aveugles aux images produites par de nouveaux générateurs inédits.</p>
+                
+                <h4>Intérêt pour la détection</h4>
+                <p>Pour contrer cet écueil, l'équipe propose d'exploiter les modèles de fondation visuelle (comme CLIP-ViT) via une Décomposition en Valeurs Singulières (SVD). La méthode scinde l'espace des caractéristiques en deux sous-espaces orthogonaux. En figeant les composantes principales (préservant ainsi la vaste connaissance sémantique pré-entraînée du modèle) et en n'affinant que les composantes résiduelles pour cibler les manipulations, le détecteur acquiert une robustesse <em>cross-generator</em> inédite. Cette stricte orthogonalité empêche le modèle d'oublier ce qu'est une "vraie" image au profit des artefacts d'une "fausse".</p>
+
+                <h4>Limites identifiées</h4>
+                <p>Si la séparation mathématique de l'espace latent s'avère redoutable et élégante pour la détection d'images fixes, la complexité de calcul liée à la décomposition SVD à grande échelle peut alourdir la phase d'adaptation. De plus, l'approche se concentre exclusivement sur le domaine spatial (images statiques), laissant en suspens la transposition de ce paradigme orthogonal aux incohérences temporelles des vidéos complexes.</p>
+                
+                <div class="source-ref" style="margin-top: 20px; font-family: var(--mono); font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 10px;">
+                    Source : <a href="https://arxiv.org/abs/2411.15633" target="_blank">Orthogonal Subspace Decomposition for Generalizable AI-Generated Image Detection</a>
+                </div>
+            </article>
+
+
+
+            <article class="doc-section veille-item">
+                <h2>3. Bias-Free? An Empirical Study on Fairness</h2>
+                <div class="veille-meta">A. Panda et al. (ACM Computing Surveys, 2026)</div>
+                
+                <h4>Résumé</h4>
+                <p>Cette étude audite les algorithmes de détection d'images synthétiques pour vérifier s'ils sont plus performants sur certaines ethnies, tranches d'âge ou genres, en s'appuyant sur des images issues de modèles de diffusion.</p>
+                
+                <h4>Intérêt pour la détection</h4>
+                <p>L'apport principal est de prouver l'absence de biais systématiques majeurs dans la détection d'images (contrairement à l'audio ou au NLP). Les détecteurs cherchent des erreurs statistiques de pixels, qui sont indépendantes des phénotypes humains.</p>
+
+                <h4>Limites identifiées</h4>
+                <p>L'étude se limite aux images fixes. L'ajout du mouvement et de l'audio réintroduit souvent des biais (via l'accent vocal ou la biométrie faciale dynamique) non mesurés ici.</p>
+                
+                <p class="source-ref">Source : <a href="https://dl.acm.org/doi/pdf/10.1145/3796544" target="_blank">Bias-Free_ An Empirical Study on Ethnicity, Gender, and Age Fairness...</a></p>
+            </article>
+
+
+            <article class="veille-item">
+    <h2>Leveraging State-Space Models for Temporal Analysis in Deepfake Detection</h2>
+    <div class="veille-meta">A. Rahman et al. (BRAC University, 2025)</div>
+    
+    <h4>Résumé</h4>
+    <p>Ce mémoire de recherche aborde la menace des deepfakes de type "lip-sync" (synchronisation labiale) en contournant la lourdeur calculatoire des architectures Transformers classiques. Les auteurs proposent une nouvelle architecture basée sur les Modèles d'Espace d'État (SSM), et plus spécifiquement l'architecture "Mamba". Le système s'articule autour d'un réseau à double flux qui modélise indépendamment et en parallèle les dynamiques temporelles des mouvements des lèvres et les caractéristiques acoustiques via des spectrogrammes Mel.</p>
+    
+    <h4>Intérêt pour la détection</h4>
+    <p>L'apport fondamental de cette étude est la résolution du compromis entre haute performance et efficacité computationnelle. Grâce à l'utilisation de blocs Mamba à complexité linéaire couplés à des extracteurs spatiaux ultralégers (MobileNet V3-Small), le modèle atteint une précision de 94,60 % sur le dataset AV Lips en n'utilisant que 2,48 millions de paramètres. De plus, cette architecture démontre une excellente capacité de généralisation (cross-dataset) lorsqu'elle est confrontée à des données et techniques de falsification inédites issues du corpus FakeAVCeleb.</p>
+
+    <h4>Limites identifiées</h4>
+    <p>Le système actuel effectue une classification strictement binaire et manque encore de mécanismes d'explicabilité (comme des cartes de chaleur temporelles) qui sont cruciaux pour faire de cet algorithme un outil forensique pleinement transparent. Par ailleurs, son efficacité face aux vidéos générées par des architectures de toute nouvelle génération (telles que les modèles de diffusion vidéo complexes) reste encore inconnue, l'évaluation s'étant restreinte à un panel de deux bases de données.</p>
+    
+    <div class="source-ref" style="margin-top: 20px; font-family: var(--mono); font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 10px;">
+        Source : <a href="https://dspace.bracu.ac.bd/xmlui/bitstream/handle/10361/27422/22341024%2C%2022341046%2C%2022301186%2C%2023241051%2C%2022341029_CSE.pdf?sequence=1&isAllowed=y" target="_blank">Leveraging State-Space Models for
+Temporal Analysis in Deepfake Detection</a>
+    </div>
+</article>
+
+
+
+            <article class="doc-section veille-item">
+                <h2>4. Deepfake Synthesis vs. Detection: An Uneven Contest</h2>
+                <div class="veille-meta">M. T. Hasan et al. (arXiv, 2026)</div>
+                
+                <h4>Résumé</h4>
+                <p>Une évaluation empirique qui compare les meilleures IA de détection actuelles aux générateurs de dernière génération (NeRF, Diffusion), tout en incluant une évaluation des performances humaines.</p>
+                
+                <h4>Intérêt pour la détection</h4>
+                <p>L'article alerte sur le retard pris par la détection. Il prouve que les évaluateurs humains avec une bonne "littératie IA" détectent aujourd'hui mieux les deepfakes ultra-réalistes que certains modèles sur-entraînés sur des architectures obsolètes.</p>
+
+                <h4>Limites identifiées</h4>
+                <p>Plus un constat d'échec qu'une solution technologique. Il appelle urgemment à repenser l'entraînement des IA défensives.</p>
+                
+                <p class="source-ref">Source : <a href="https://arxiv.org/abs/2602.07986" target="_blank">Deepfake Synthesis vs. Detection: An Uneven Contest</a></p>
+            </article>
+
+
+         <article class="veille-item">
+            <h2>Facial Spatiotemporal Graphs: Leveraging the 3D Facial Surface for Remote Physiological Measurement</h2>
+            <div class="veille-meta">S. Cantrill et al. (arXiv, 2026)</div>
+            
+            <h4>Résumé</h4>
+            <p>Cet article présente une avancée majeure dans l'extraction de signaux physiologiques par photopléthysmographie à distance (rPPG). Les algorithmes classiques peinent à isoler le flux sanguin des variations d'éclairage ou de mouvement car ils opèrent sur des vidéos 2D (grilles de pixels rigides). Pour résoudre ce problème, les auteurs introduisent <em>STGraph</em> (Facial Spatiotemporal Graph) et <em>MeshPhys</em>. Cette approche modélise le visage non plus comme une image plane, mais comme une séquence de maillages 3D (3D facial mesh), alignant ainsi mathématiquement le champ récepteur du réseau de neurones directement sur la topologie dynamique de la peau de l'utilisateur.</p>
+            
+            <h4>Intérêt pour la détection forensique</h4>
+            <p>Bien qu'initialement conçu pour le suivi médical, ce paradigme offre un potentiel de rupture pour la détection des deepfakes. Actuellement, les détecteurs physiologiques (qui cherchent le pouls) sont très fragiles face aux mouvements de tête de la cible. En ancrant l'analyse chromatique (micro-variations de la couleur du sang) sur une structure 3D robuste, il devient possible d'extraire un signal rPPG d'une grande pureté. Les futurs détecteurs forensiques pourraient utiliser cette méthode pour prouver de manière irréfutable qu'un visage synthétique — même généré par un modèle de diffusion ou un NeRF ultra-réaliste — est incapable de simuler une perfusion sanguine physiologiquement cohérente à travers une géométrie faciale complexe en mouvement.</p>
+
+            <h4>Limites identifiées</h4>
+            <p>La robustesse de cette méthode repose entièrement sur la précision de l'algorithme chargé d'extraire le maillage 3D initial sur chaque image de la vidéo (3D face alignment). Dans le cadre d'une vidéo fortement compressée ou issue des réseaux sociaux (où les deepfakes circulent majoritairement), la reconstruction de ce maillage risque d'échouer ou d'introduire des artefacts topologiques. De plus, le coût computationnel d'une modélisation 3D frame par frame reste un frein pour une détection de deepfakes en temps réel à grande échelle.</p>
+            
+            <div class="source-ref" style="margin-top: 20px; font-family: var(--mono); font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 10px;">
+                Source : <a href="https://arxiv.org/abs/2601.13724" target="_blank">Facial Spatiotemporal Graphs for rPPG</a>
+            </div>
+        </article>
+
+
+
+
+
+            <article class="doc-section veille-item">
+                <h2>2. GenVidBench: A 6-Million Benchmark</h2>
+                <div class="veille-meta">Z. Ni et al. (Huawei Noah's Ark Lab, arXiv 2025)</div>
+                
+                <h4>Résumé</h4>
+                <p>Face à la rareté de bases de données reflétant les standards qualitatifs actuels, les chercheurs publient le plus grand dataset mondial (6,78 millions de vidéos) généré par 11 IA (Sora, Kling, Runway, etc.) avec des labels sémantiques complets.</p>
+                
+                <h4>Intérêt pour la détection</h4>
+                <p>L'étude met en lumière le "piège" de l'évaluation classique : un détecteur doit impérativement être testé sur un générateur qu'il n'a jamais vu lors de son entraînement (Cross-Generator Task) pour prouver son efficacité en conditions réelles.</p>
+
+                <h4>Limites identifiées</h4>
+                <p>L'immensité du corpus exige des ressources de calcul massives (bien qu'un sous-ensemble "143k" soit proposé), limitant l'itération rapide pour les petits laboratoires de recherche. De plus cette base de données n'est pas 
+                    uniquement constituée de deepfake mais aussi de vidéos générées par AI comme des paysages synthétiques, des vidéos de sport générées par IA, etc. Par conséquent, elle ne se concentre pas exclusivement sur les deepfakes faciaux, ce qui peut diluer la pertinence des modèles entraînés sur ce dataset pour la détection spécifique de deepfakes humains. Celui reste toutefois intéressant pour évaluer la capacité de généralisation des détecteurs sur une grande variété de contenus synthétiques, mais il ne doit pas être considéré comme un benchmark définitif pour la détection de deepfakes faciaux.
+                </p>
+                
+                <p class="source-ref">Source : <a href="https://arxiv.org/abs/2501.11340" target="_blank">GenVidBench: A 6-Million Benchmark for AI-Generated Video Detection</a></p>
+            </article>
+
+        </div>
+    </div>
+</main>
+
+
+<footer>
+    <div class="wrap footer-inner">
+        <span>Deepfake — Veille réalisée par Dimitri Novareze</span>
+        <span id="currentYear"></span>
+    </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>

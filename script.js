@@ -1,34 +1,59 @@
-// Attendre que la page soit chargée
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Mettre à jour l'année automatiquement dans le footer
-    const yearSpan = document.getElementById('currentYear');
-    yearSpan.textContent = new Date().getFullYear();
+/* ═══════════════════════════════════════════════════
+   DEEPFAKE WATCH — script.js  v4.0
+═══════════════════════════════════════════════════ */
 
-    // 2. Exemple de fonction pour ajouter dynamiquement une alerte/article
-    // Vous pourrez utiliser cette fonction pour remplir le site via une base de données plus tard
-    function ajouterArticle(axeId, titre, date, resume, lien) {
-        // Sélectionner la section correspondante (axe1, axe2 ou axe3)
-        const section = document.querySelector(`#${axeId} .cards-container`);
-        
-        if(section) {
-            // Créer le HTML de la carte
-            const articleHTML = `
-                <article class="card">
-                    <h4>${titre}</h4>
-                    <p class="date">${date}</p>
-                    <p class="summary">${resume}</p>
-                    <a href="${lien}" class="read-more" target="_blank">Lire la source →</a>
-                </article>
-            `;
-            
-            // Ajouter le HTML à la fin de la section
-            section.innerHTML += articleHTML;
-        }
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ── Dates ─────────────────────────────────────
+    const now = new Date();
+
+    const dateEl = document.getElementById('currentDate');
+    if (dateEl) dateEl.textContent = now.toLocaleDateString('fr-FR', {
+        day: 'numeric', month: 'long', year: 'numeric'
+    });
+
+    const yearEl = document.getElementById('currentYear');
+    if (yearEl) yearEl.textContent = now.getFullYear();
+
+    // ── Navigation ────────────────────────────────
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const pages   = document.querySelectorAll('.page');
+
+    function showPage(id) {
+        pages.forEach(p  => p.classList.remove('active'));
+        navBtns.forEach(b => b.classList.remove('active'));
+        const target = document.getElementById('page-' + id);
+        if (target) target.classList.add('active');
+        const btn = document.querySelector(`.nav-btn[data-page="${id}"]`);
+        if (btn) btn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- TEST : Décommentez la ligne ci-dessous pour voir l'ajout dynamique ---
-    // ajouterArticle('axe3', 'Nouvelle norme C2PA publiée', '2023-10-27', 'Adobe et Microsoft valident la version 1.3...', 'https://c2pa.org');
-    
-    console.log("Site de veille chargé et prêt.");
+    navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+
+    // ── Veille — filtre ───────────────────────────
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const articles   = document.querySelectorAll('.veille-article');
+    const countEl    = document.getElementById('veilleCount');
+
+    function updateCount() {
+        const n = [...articles].filter(a => !a.classList.contains('hidden')).length;
+        if (countEl) countEl.textContent = `${n} article${n > 1 ? 's' : ''}`;
+    }
+
+    function applyFilter(cat) {
+        articles.forEach(a => a.classList.toggle('hidden', cat !== 'all' && a.dataset.cat !== cat));
+        updateCount();
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilter(btn.dataset.filter);
+        });
+    });
+
+    updateCount();
+
 });
