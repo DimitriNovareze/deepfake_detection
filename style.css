@@ -230,10 +230,11 @@ blockquote {
 }
 
 /* ── Grille Veille ──────────────────────────────── */
+/* ── Grille Veille ──────────────────────────────── */
 .veille-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes très larges */
-    gap: 40px;
+    grid-template-columns: 1fr; /* 1 seule colonne pleine largeur */
+    gap: 50px; /* J'ai légèrement augmenté l'espace vertical entre les articles pour aérer */
     margin-top: 40px;
 }
 

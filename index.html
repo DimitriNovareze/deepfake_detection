@@ -59,29 +59,19 @@
 
             <blockquote>
                 « Un deepfake est une image, une vidéo ou une séquence audio modifiée ou fabriquée au moyen d'une technique de synthèse multimédia reposant sur l'intelligence artificielle. »
-                <footer>Wikipedia / consensus académique</footer>
+                <footer>Wikipedia </footer>
             </blockquote>
 
             <p>Depuis 2021, les <strong>modèles de diffusion</strong> (Stable Diffusion, DALL-E, Imagen) ont supplanté les GANs en qualité et en diversité. Leur signature statistique fondamentalement différente oblige les détecteurs à s'adapter constamment.</p>
 
-            <div class="tag-row">
-                <span class="tag">GANs</span>
-                <span class="tag">Autoencodeurs</span>
-                <span class="tag">Diffusion models</span>
-                <span class="tag">Face swap</span>
-                <span class="tag">Voice cloning</span>
-                <span class="tag">NeRF</span>
-                <span class="tag">LipSync</span>
-                <span class="tag">StyleGAN</span>
-            </div>
         </section>
 
         <section class="doc-section">
        <section class="doc-section">
-            <h2><span class="sec-num">2.</span> Architectures Génératives : Fondements Mathématiques et Scientifiques</h2>
-            <p>L'évolution technologique a basculé de simples méthodes de "shallow fakes" vers des architectures neuronales complexes. Pour comprendre les artefacts résiduels que les détecteurs exploitent, il est impératif de définir rigoureusement les modèles mathématiques de génération sous-jacents.</p>
+            <h2><span class="sec-num">2.</span> Architectures Génératives</h2>
+            <p>L'évolution technologique a basculé de simples méthodes de montage basic vers des architectures neuronales complexes. Pour comprendre les artefacts résiduels que les détecteurs exploitent, il est impératif de définir rigoureusement les modèles mathématiques de génération sous-jacents.</p>
             
-            <h3>2.1 Auto-encodeurs (AE) et le "Face Swap" classique</h3>
+            <h3>2.1 Auto-encodeurs et le Face Swap classique</h3>
             <p>Le fondement des premiers outils de remplacement de visage (comme DeepFaceLab ou FakeApp) repose sur des réseaux d'auto-encodeurs. L'architecture comprend deux composantes : un encodeur $E$ qui compresse une image d'entrée $x$ dans un espace latent (un vecteur d'information de dimension réduite) $z = E(x)$, et un décodeur $D$ qui reconstruit l'image $\hat{x} = D(z)$.</p>
             <p><strong>Le principe du Deepfake :</strong> Le modèle est entraîné en utilisant un <em>encodeur partagé</em> $E_{shared}$ pour deux sujets A et B. Ce goulot d'étranglement force le réseau à apprendre les caractéristiques universelles du visage (expressions, pose, éclairage) agnostiques à l'identité. En revanche, deux <em>décodeurs spécifiques</em> $D_A$ et $D_B$ sont entraînés pour reconstruire l'identité propre de chaque sujet. Pour générer un deepfake (placer le visage de A sur B), l'image de B est compressée via $E_{shared}$ pour extraire son expression temporelle, puis l'image est reconstruite via le décodeur $D_A$.</p>
 
@@ -106,7 +96,7 @@
             <p>Pour générer l'image 2D finale, le modèle utilise les principes du <em>rendu volumique</em> : l'algorithme lance des rayons virtuels à travers l'espace 3D et intègre numériquement les couleurs et densités le long de ces rayons. Dans le contexte des deepfakes, les NeRFs permettent de générer des visages d'une cohérence géométrique (pose de la tête) et lumineuse mathématiquement parfaite sous tous les angles, rendant inopérants les détecteurs basés sur les asymétries visuelles 2D.</p>
 
       <h3>2.5 Modèles de Diffusion (Denoising Diffusion Probabilistic Models)</h3>
-        <p>Aujourd'hui considérés comme l'état de l'art de la génération visuelle, les modèles de diffusion reposent sur la thermodynamique hors équilibre et se décomposent en deux processus markoviens :</p>
+        <p>Aujourd'hui considérés comme l'état de l'art de la génération visuelle, les modèles se décomposent en deux processus markoviens :</p>
         
         <ol>
             <li><strong>Processus de diffusion (Forward — La phase d'entraînement) :</strong> On part d'une image authentique $x_0$ à laquelle on ajoute itérativement un bruit gaussien $\mathcal{N}$ au fil de $T$ étapes de temps. Ce processus détruit progressivement le signal sémantique jusqu'à obtenir un bruit isotrope pur $x_T$. Le but de cette phase est de forcer l'IA à observer et cartographier la trajectoire mathématique exacte de cette destruction.</li>
@@ -114,7 +104,8 @@
             <li><strong>Processus de débruitage (Reverse — La phase de génération) :</strong> Un réseau de neurones (généralement une architecture U-Net avec mécanismes d'attention) apprend la trajectoire inverse. C'est ici que réside la rupture paradigmatique : lors de l'inférence (création d'une nouvelle image), <strong>le système ne modifie pas une image existante, il part d'un tenseur de bruit pur et totalement aléatoire</strong>. L'IA utilise alors les connaissances acquises lors du processus Forward pour "sculpter" ce chaos statistique. À chaque étape $t$, le réseau prédit et soustrait le bruit, faisant émerger itérativement une image inédite et cohérente. La fonction de perte (loss) minimise l'erreur quadratique entre le vrai bruit injecté $\epsilon$ et le bruit prédit $\epsilon_\theta(x_t, t)$.</li>
         </ol>
         
-        <p>Pour contourner les coûts computationnels prohibitifs d'un processus appliqué pixel par pixel, les <strong>Modèles de Diffusion Latente (LDMs)</strong> (comme Stable Diffusion ou Midjourney) appliquent ces opérations probabilistes à l'intérieur d'un <em>espace latent compressé</em> via un puissant auto-encodeur variationnel. Ils ne souffrent pas d'effondrement de mode (mode collapse) typique des GANs, offrant une diversité sémantique et une résolution fine qui mettent actuellement en échec la majorité des outils forensiques.</p>
+        <p>Pour contourner les coûts computationnels prohibitifs d'un processus appliqué pixel par pixel, les <strong>Modèles de Diffusion Latente (LDMs)</strong> (comme Stable Diffusion ou Midjourney) appliquent ces opérations probabilistes à l'intérieur d'un <em>espace latent compressé</em> via un puissant auto-encodeur variationnel. Ils ne souffrent pas d'effondrement de mode typique des GANs : Dans un GAN, le générateur cherche uniquement à tromper le discriminateur. S'il découvre qu'une image ultra-spécifique (ex: un visage de profil) trompe son adversaire à 100 %, le modèle s'effondre mathématiquement sur ce "mode" : il devient paresseux et ne génère plus que ce type de visage, perdant toute diversité de création.<br><br>
+                Les modèles de diffusion, n'ayant pas d'architecture adversaire (pas de "policier" à duper), ne peuvent pas tricher. Ils sont obligés de cartographier la totalité de la distribution de données. Ils génèrent ainsi une <strong>diversité sémantique totale</strong> sans jamais tourner en boucle, ce qui rend les deepfakes modernes beaucoup plus imprévisibles et met en échec les outils forensiques qui cherchaient des motifs répétitifs.</p>
 
 
             <p>
@@ -193,7 +184,7 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
         <div class="wrap">
             <p class="page-label">Synthèse bibliographique et historique</p>
             <h1>État de l'art de la détection des deepfakes</h1>
-            <p class="page-intro">Une analyse chronologique de la course aux armements entre les méthodes de génération synthétique et les architectures de détection forensique, des premiers défauts visuels aux modèles à base de graphes spatio-temporels.</p>
+            <p class="page-intro">Une état de l'art chronologique des méthodes de détection de génération synthétique : des premiers défauts visuels aux modèles à base de graphes spatio-temporels.</p>
         </div>
     </div>
 
@@ -281,19 +272,19 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
         </section>
 
        <section class="doc-section">
-            <h2><span class="sec-num">7.</span> Les architectures d'avant-garde (2023–2026)</h2>
+            <h2><span class="sec-num">7.</span> Les nouvelles architectures (2023–2026)</h2>
             <div class="method-label">Transformers, Graphes & Multimodalité</div>
             
-            <p>Avec l'arrivée des modèles de Diffusion et des NeRFs, la détection a dû adopter des paradigmes mathématiques complexes capables de capter un contexte global et non plus seulement local.</p>
+            <p>Avec l'arrivée des modèles de Diffusion et des NeRFs, la détection a dû adopter des méthodes mathématiques complexes capables de capter un contexte global et non plus seulement local.</p>
             
-            <h3>6.1 Vision Transformers et Graphes Dynamiques (STGT)</h3>
+            <h3>7.1 Vision Transformers et Graphes Dynamiques (STGT)</h3>
             <p>Dépassant les grilles de pixels rigides des CNN, des modèles comme le <strong>Spatio-Temporal Graph Transformer (STGT)</strong> modélisent le visage comme un graphe $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. Les nœuds $\mathcal{V}$ représentent 468 points de repère faciaux. Les arêtes $\mathcal{E}$ mesurent les dépendances spatiales et temporelles calculées par l'équation du <strong>flux optique</strong> (ex: algorithme de Lucas-Kanade) : $\frac{\partial I}{\partial x}V_x + \frac{\partial I}{\partial y}V_y + \frac{\partial I}{\partial t} = 0$.</p>
             
             <p>L'IA utilise ensuite un <em>mécanisme d'Attention</em> (Transformers) pour calculer dynamiquement quelles parties du graphe sont incohérentes :</p>
             <p>$$ \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V $$</p>
             <p>Cette équation permet au modèle de concentrer son "attention" sur d'infimes désynchronisations (ex: le ratio d'ouverture de la bouche $Q$ par rapport au mouvement de la mâchoire $K$) sans être trompé par les mouvements de tête globaux de la vidéo.</p>
 
-            <h3>6.2 Fusion Spatio-Temporelle (STFF) et Benchmarks</h3>
+            <h3>7.2 Fusion Spatio-Temporelle (STFF) et Benchmarks</h3>
             <p>La tendance actuelle est à la multimodalité (Spatio-Temporal Feature Fusion - STFF). Les vecteurs d'extraction spatiale (RGB/DCT) et physiologiques (rPPG) sont concaténés et optimisés via des fonctions de perte contrastives. Ces architectures ultra-paramétrées sont désormais évaluées sur des corpus colossaux comme <strong>GenVidBench</strong> (6,78 millions de vidéos générées par 11 modèles de fondation comme Sora ou Kling), testant ainsi leur capacité à généraliser mathématiquement sur des espaces latents de génération totalement inconnus lors de l'entraînement.</p>
         </section>
 
@@ -351,7 +342,7 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
         <div class="wrap">
             <p class="page-label">Veille Scientifique</p>
             <h1>Dernières publications académiques</h1>
-            <p class="page-intro">Analyse critique des derniers articles de recherche (2025-2026) repoussant les limites de la détection forensique.</p>
+            <p class="page-intro">Présentation des dernieres avancées dans le domaine de la détection des deepfakes.</p>
         </div>
     </div>
 
@@ -396,23 +387,30 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
             </article>
 
 
+<article class="veille-item">
+    <h2>Bias-Free? An Empirical Study on Ethnicity, Gender, and Age Fairness in Deepfake Detection</h2>
+    <div class="veille-meta">A. Panda et al. (ACM Computing Surveys, 2026)</div>
+    
+    <h4>Résumé</h4>
+    <p>Cette étude audite les performances des algorithmes de détection d'images synthétiques (CNNDetection, UnivFD, DIRE, etc.) sur 14 générateurs différents (GANs et Modèles de Diffusion) pour vérifier s'ils discriminent certaines ethnies, tranches d'âge ou genres. Les auteurs ont mesuré les disparités de Taux de Faux Positifs (FPR) et d'Égalité des Chances (Equalized Odds) sur le dataset démographiquement équilibré <em>FairFace</em>.</p>
+    
+    <h4>Résultats empiriques de l'étude</h4>
+    <p>Les résultats contredisent l'intuition habituelle : <strong>les détecteurs de deepfakes sont nativement équitables (fair)</strong>. L'étude démontre que :</p>
+    <ul>
+        <li><strong>Absence de biais ethno-raciaux :</strong> La disparité du taux d'erreur entre les populations caucasiennes, noires, asiatiques ou indiennes est inférieure à 3 % sur les modèles modernes (comme UnivFD). C'est un contraste massif avec les IA de reconnaissance faciale classiques qui peinent souvent sur les peaux foncées.</li>
+        <li><strong>Équité de Genre et d'Âge :</strong> Aucune différence statistique significative (p-value > 0.05) n'a été relevée dans la capacité à détecter un deepfake d'homme vs femme, ou de senior vs jeune.</li>
+        <li><strong>Le rôle du générateur :</strong> Les chercheurs ont découvert que les rares variations de performances ne dépendent pas de la démographie de la cible, mais des biais d'entraînement du <em>générateur</em> (ex: si StyleGAN2 a mal appris à générer des cheveux texturés, le détecteur repérera l'image plus facilement grâce à ces défauts de génération, et non à cause de l'ethnie).</li>
+    </ul>
 
-            <article class="doc-section veille-item">
-                <h2>3. Bias-Free? An Empirical Study on Fairness</h2>
-                <div class="veille-meta">A. Panda et al. (ACM Computing Surveys, 2026)</div>
-                
-                <h4>Résumé</h4>
-                <p>Cette étude audite les algorithmes de détection d'images synthétiques pour vérifier s'ils sont plus performants sur certaines ethnies, tranches d'âge ou genres, en s'appuyant sur des images issues de modèles de diffusion.</p>
-                
-                <h4>Intérêt pour la détection</h4>
-                <p>L'apport principal est de prouver l'absence de biais systématiques majeurs dans la détection d'images (contrairement à l'audio ou au NLP). Les détecteurs cherchent des erreurs statistiques de pixels, qui sont indépendantes des phénotypes humains.</p>
+    <h4>Explication scientifique du phénomène</h4>
+    <p>Pourquoi ces modèles sont-ils justes ? Contrairement aux IA biométriques qui analysent la sémantique du visage (écartement des yeux, forme du nez), les détecteurs de deepfakes se comportent comme des filtres fréquentiels. Ils traquent des "erreurs d'assemblage" de pixels de très bas niveau (artefacts de convolution, bruit de diffusion). Or, une erreur d'upsampling mathématique a exactement la même signature fréquentielle sur une peau noire, blanche, jeune ou âgée.</p>
 
-                <h4>Limites identifiées</h4>
-                <p>L'étude se limite aux images fixes. L'ajout du mouvement et de l'audio réintroduit souvent des biais (via l'accent vocal ou la biométrie faciale dynamique) non mesurés ici.</p>
-                
-                <p class="source-ref">Source : <a href="https://dl.acm.org/doi/pdf/10.1145/3796544" target="_blank">Bias-Free_ An Empirical Study on Ethnicity, Gender, and Age Fairness...</a></p>
-            </article>
+    <h4>Limites identifiées</h4>
+    <p>Les résultats rassurants de cette étude se limitent strictement aux images fixes (Deepfake visuel spatial). Les auteurs rappellent que dès lors que l'on introduit l'audio (clonage vocal) ou la vidéo (synchronisation labiale dynamique), de nouveaux biais liés aux accents, à la prosodie ou à la motricité faciale culturelle risquent de réapparaître.</p>
+    <p class="source-ref">Source : <a href="https://dl.acm.org/doi/pdf/10.1145/3796544" target="_blank">Bias-Free_ An Empirical Study on Ethnicity, Gender, and Age Fairness...</a></p>
 
+</article>
+             
 
             <article class="veille-item">
     <h2>Leveraging State-Space Models for Temporal Analysis in Deepfake Detection</h2>
@@ -433,21 +431,28 @@ Temporal Analysis in Deepfake Detection</a>
     </div>
 </article>
 
+<article class="veille-item">
+    <h2>Deepfake Synthesis vs. Detection: An Uneven Contest</h2>
+    <div class="veille-meta">M. T. Hasan et al. (arXiv, 2026)</div>
+    
+    <h4>Résumé</h4>
+    <p>Cette étude empirique dresse un bilan critique de la "course aux armements" forensique en 2026. Les chercheurs ont confronté 11 modèles de détection considérés comme l'état de l'art (Xception, EfficientNet, MesoInception4, F3Net, etc.) à un corpus massif généré par 20 architectures de synthèse de pointe, incluant les dernières avancées en matière de Champs de Radiance Neuronaux (ER-NeRF, RAD-NeRF) et de modèles de Diffusion (DiffFace). L'étude intègre également une campagne d'évaluation perceptuelle humaine sur 61 participants.</p>
+    
+    <h4>Résultats quantitatifs : L'effondrement des algorithmes</h4>
+    <p>Les métriques publiées démontrent un échec quasi systémique des algorithmes actuels face au saut technologique de la génération 3D et probabiliste :</p>
+    <ul>
+        <li><strong>Chute de l'AUC (Area Under the Curve) :</strong> Les architectures convolutives classiques, qui excellaient historiquement à > 0.95 sur FaceForensics++, s'effondrent face aux NeRFs et modèles de diffusion. Le modèle Xception tombe à un AUC de <strong>0.425</strong>, MesoInception4 à <strong>0.421</strong>, et UCF à <strong>0.339</strong> (des scores paradoxalement inférieurs à une prédiction purement aléatoire de 0.5).</li>
+        <li><strong>Invisibilité des nouveaux artefacts :</strong> L'étude prouve que les modèles de détection surapprennent les artefacts d'<em>upsampling</em> 2D des GANs. Les NeRFs reconstruisant géométriquement la lumière en 3D, ils ne laissent aucune trace convolutionnelle spatiale, aveuglant totalement des modèles comme EfficientNet (précision chutant sous les 50 %).</li>
+    </ul>
 
+    <h4>L'évaluation humaine : L'IA battue par l'œil expert</h4>
+    <p>Le résultat le plus contre-intuitif de l'article concerne la performance humaine. L'étude a séparé les évaluateurs en deux groupes : novices et familiers avec l'IA.
+    Les participants experts en IA ont atteint un score <strong>AUC exceptionnel de 0.931</strong> (avec une précision globale de 82,5 %), surpassant très largement les meilleurs algorithmes automatisés testés. Les humains utilisent en effet une analyse sémantique et physique globale (incohérence de l'éclairage global, asymétrie des pupilles, physique des cheveux) que les détecteurs locaux ignorent totalement. Toutefois, le taux d'erreur humain remonte fortement face aux modèles spécifiques ER-NeRF et DiffFace, confirmant l'inégalité du combat actuel.</p>
 
-            <article class="doc-section veille-item">
-                <h2>4. Deepfake Synthesis vs. Detection: An Uneven Contest</h2>
-                <div class="veille-meta">M. T. Hasan et al. (arXiv, 2026)</div>
-                
-                <h4>Résumé</h4>
-                <p>Une évaluation empirique qui compare les meilleures IA de détection actuelles aux générateurs de dernière génération (NeRF, Diffusion), tout en incluant une évaluation des performances humaines.</p>
-                
-                <h4>Intérêt pour la détection</h4>
-                <p>L'article alerte sur le retard pris par la détection. Il prouve que les évaluateurs humains avec une bonne "littératie IA" détectent aujourd'hui mieux les deepfakes ultra-réalistes que certains modèles sur-entraînés sur des architectures obsolètes.</p>
-
-                <h4>Limites identifiées</h4>
-                <p>Plus un constat d'échec qu'une solution technologique. Il appelle urgemment à repenser l'entraînement des IA défensives.</p>
-                
+    <h4>Limites identifiées</h4>
+    <p>L'étude pose un constat d'échec accablant mais ne propose pas de nouvelle architecture mathématique pour résoudre le problème. De plus, l'échantillon humain (61 personnes) reste statistiquement restreint pour modéliser une véritable ligne de base perceptuelle globale.</p>
+    
+  
                 <p class="source-ref">Source : <a href="https://arxiv.org/abs/2602.07986" target="_blank">Deepfake Synthesis vs. Detection: An Uneven Contest</a></p>
             </article>
 
