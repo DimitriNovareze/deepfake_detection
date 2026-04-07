@@ -103,14 +103,15 @@
             
             <li><strong>Processus de débruitage (Reverse — La phase de génération) :</strong> Un réseau de neurones (généralement une architecture U-Net avec mécanismes d'attention) apprend la trajectoire inverse. C'est ici que réside la rupture paradigmatique : lors de l'inférence (création d'une nouvelle image), <strong>le système ne modifie pas une image existante, il part d'un tenseur de bruit pur et totalement aléatoire</strong>. L'IA utilise alors les connaissances acquises lors du processus Forward pour "sculpter" ce chaos statistique. À chaque étape $t$, le réseau prédit et soustrait le bruit, faisant émerger itérativement une image inédite et cohérente. La fonction de perte (loss) minimise l'erreur quadratique entre le vrai bruit injecté $\epsilon$ et le bruit prédit $\epsilon_\theta(x_t, t)$.</li>
         </ol>
-        
+     
         <p>Pour contourner les coûts computationnels prohibitifs d'un processus appliqué pixel par pixel, les <strong>Modèles de Diffusion Latente (LDMs)</strong> (comme Stable Diffusion ou Midjourney) appliquent ces opérations probabilistes à l'intérieur d'un <em>espace latent compressé</em> via un puissant auto-encodeur variationnel. Ils ne souffrent pas d'effondrement de mode typique des GANs : Dans un GAN, le générateur cherche uniquement à tromper le discriminateur. S'il découvre qu'une image ultra-spécifique (ex: un visage de profil) trompe son adversaire à 100 %, le modèle s'effondre mathématiquement sur ce "mode" : il devient paresseux et ne génère plus que ce type de visage, perdant toute diversité de création.<br><br>
                 Les modèles de diffusion, n'ayant pas d'architecture adversaire (pas de "policier" à duper), ne peuvent pas tricher. Ils sont obligés de cartographier la totalité de la distribution de données. Ils génèrent ainsi une <strong>diversité sémantique totale</strong> sans jamais tourner en boucle, ce qui rend les deepfakes modernes beaucoup plus imprévisibles et met en échec les outils forensiques qui cherchaient des motifs répétitifs.</p>
 
 
             <p>
 Cette veille technologique étant axée sur la détection, nous n'aborderons pas en détail les techniques de génération, mais il est essentiel de comprendre que chaque avancée dans la qualité et la diversité des contenus synthétiques représente un défi supplémentaire pour les méthodes de détection, qui doivent constamment évoluer pour suivre le rythme effréné de l'innovation dans ce domaine.
-
+   <p> Pour mieux comprendre le fonctionnement des modèles de diffusion et les GANs, je vous invite à regarder le MSO 3.5 Apprentissage automatique qui traite de ces sujets. De plus, sur les modèles de diffusion, je vous recommande de consulter cette vidéo youtube : <a href="https://www.youtube.com/watch?v=iv-5mZ_9CPY&t=1144s" target="_blank"></a> </p>
+        
 Voici le lien d'une page github qui recence l'état de l'art des modèles de génération : <a href="https://github.com/flyingby/Awesome-Deepfake-Generation-and-Detection" target="_blank">github.com/flyingby/Awesome-Deepfake-Generation-and-Detection</a> </p>
         </section>
 <section class="doc-section">
@@ -318,16 +319,318 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
                 <li><strong>Cadre Réglementaire :</strong> Des législations pionnières, telles que l'<strong>AI Act de l'Union Européenne</strong> et les <em>Executive Orders</em> aux États-Unis, imposent désormais que les contenus générés par des systèmes d'IA à haut risque soient "lisibles par machine" comme étant artificiels. Cependant, la loi peine à imposer un standard technologique unique (C2PA vs Watermarking propriétaire), ralentissant l'interopérabilité entre les plateformes de réseaux sociaux.</li>
             </ul>
         </section>
+<section class="doc-section">
+            <h2><span class="sec-num">9.</span> L'Écosystème d'Évaluation : Datasets et Métriques Forensiques</h2>
+            <div class="method-label">Bases de données & Mathématiques de l'Évaluation</div>
+
+            <p>La robustesse des modèles de détection dépend intrinsèquement de la qualité, de la diversité et de l'échelle de leurs données d'entraînement. L'analyse de la littérature montre une évolution claire : nous sommes passés de petits corpus de laboratoire à des ensembles de données massifs, multimodaux et "in-the-wild" (en conditions réelles).</p>
+
+            <h3>9.1 Évolution des Datasets</h3>
+            <p>Historiquement, les datasets de <strong>première génération</strong> (comme UADFV ou FaceForensics++) étaient générés dans des conditions hautement contrôlées. Bien qu'utiles pour créer des <em>baselines</em> (références de base), les détecteurs entraînés sur ces données échouent souvent à généraliser face à des vidéos compressées ou dégradées sur internet. 
+            Les <strong>générations suivantes</strong> (Celeb-DF, DFDC, ForgeryNet) ont drastiquement augmenté le volume, introduit de fortes variations (pose, éclairage, occlusions) et appliqué des perturbations (bruit, compression) pour simuler le "lavage" opéré par les réseaux sociaux.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Année</th>
+                        <th>Modalité</th>
+                        <th>Volume & Caractéristiques Techniques</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>UADFV</strong></td>
+                        <td>2018</td>
+                        <td>Visuel</td>
+                        <td>98 vidéos (49 réelles / 49 fausses). Environnement contrôlé. Pionnier pour l'analyse des premiers "Face-swaps" (artefacts de clignements d'yeux).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FaceForensics++ (FF++)</strong></td>
+                        <td>2019</td>
+                        <td>Visuel</td>
+                        <td>1 000 vidéos réelles / 4 000 fausses. Générées via 4 méthodes distinctes (Deepfakes, Face2Face, FaceSwap, NeuralTextures). Standard <em>de facto</em> pour l'analyse spatiale.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Celeb-DF</strong></td>
+                        <td>2020</td>
+                        <td>Visuel</td>
+                        <td>590 réelles / 5 639 fausses. Haute qualité visuelle, artefacts de fusion fortement réduits. Utilisé pour évaluer la généralisation (<em>cross-dataset benchmark</em>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DFDC</strong> <em>(Deepfake Detection Challenge)</em></td>
+                        <td>2020</td>
+                        <td>Audio-Visuel</td>
+                        <td>+113 000 vidéos. Acteurs rémunérés (crowdsourcing). Introduit de lourdes augmentations et perturbations adversaires pour mimer la réalité.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>WildDeepfake</strong></td>
+                        <td>2021</td>
+                        <td>Visuel</td>
+                        <td>707 réelles / 3 805 fausses. Vidéos collectées directement sur Internet ("in-the-wild"). Diversité maximale des environnements et des cibles.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ForgeryNet</strong></td>
+                        <td>2021</td>
+                        <td>Visuel</td>
+                        <td>2,9 millions d'images / 220 000 vidéos. Échelle massive incluant des attaques spatiales, temporelles et de manipulation d'identité.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ASVspoof 2021</strong></td>
+                        <td>2021</td>
+                        <td>Audio</td>
+                        <td>> 600 000 extraits audio. Focalisé sur le Text-to-Speech (TTS) et la conversion vocale. Conçu pour tester la robustesse face aux codecs et à la transmission réseau.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>WaveFake</strong></td>
+                        <td>2021</td>
+                        <td>Audio</td>
+                        <td>+100 000 clips audio générés. Cible spécifiquement les méthodes de synthèse modernes par diffusion et vocodeurs neuronaux.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>9.2 Rigueur Mathématique : Les Métriques d'Évaluation Standardisées</h3>
+            <p>Dans un contexte forensique, s'appuyer uniquement sur la "Précision" (<em>Accuracy</em>, soit le ratio de prédictions correctes) est mathématiquement dangereux, en particulier si le dataset est déséquilibré (beaucoup plus de vrais que de faux). C'est pourquoi la recherche standardise d'autres métriques :</p>
+
+            <ul>
+                <li><strong>AUC-ROC (Area Under the Receiver Operating Characteristic Curve) :</strong> C'est la métrique reine en détection de deepfakes. La courbe ROC trace le Taux de Vrais Positifs (TPR) en fonction du Taux de Faux Positifs (FPR) pour tous les seuils de classification possibles. L'AUC est l'intégrale de cette courbe :
+                $$ \text{AUC} = \int_{0}^{1} \text{TPR}(\text{FPR}^{-1}(x)) \, dx $$
+                Un AUC de 1.0 indique un détecteur parfait, tandis que 0.5 équivaut à un tirage au sort. Cette métrique évalue la capacité intrinsèque du modèle à séparer les classes mathématiquement, indépendamment du seuil de décision humain.</li>
+                
+                <li><strong>EER (Equal Error Rate) :</strong> Essentiellement utilisée pour les deepfakes vocaux (biométrie audio), l'EER est le point exact sur la courbe ROC où le Taux d'Acceptation Fausse (FAR) croise le Taux de Rejet Faux (FRR) :
+                $$ \text{FAR}(\theta) = \text{FRR}(\theta) $$
+                Plus l'EER est bas, plus le système est fiable, car il minimise simultanément le risque d'accuser un média authentique et celui de laisser passer un deepfake.</li>
+
+                <li><strong>F1-Score :</strong> Utilisé en complément, il représente la moyenne harmonique entre la Précision et le Rappel (Recall). Il est particulièrement pertinent lorsque la détection des "Faux positifs" (accuser à tort un vrai contenu) a un coût social ou juridique très élevé.</li>
+            </ul>
+        </section>
+
 
         <section class="doc-section">
-            <h2><span class="sec-num">9.</span> Problèmes ouverts et limites actuelles</h2>
+            <h2><span class="sec-num">10.</span> Évaluation Comparative Algorithmique (DeepfakeBench)</h2>
+            <div class="method-label">Performances Empiriques & Analyse Cross-Domain</div>
+            <p>Afin de consolider cet état de l'art, nous nous appuyons sur la méta-analyse d'Erokhin et Komendantova (2026) : <a href="https://www.mdpi.com/2078-2489/17/4/347" target="_blank">https://www.mdpi.com/2078-2489/17/4/347</a>. </p>
+            <p>Pour illustrer empiriquement les limites théoriques abordées dans les sections précédentes, nous reproduisons ici l'évaluation comparative issue de la revue de littérature de 2026. Ce tableau synthétise les performances des algorithmes de détection spatiale (basés sur les <em>frames</em> faciaux) évalués sur le framework standardisé <strong>DeepfakeBench</strong>.</p>
+            
+            <div class="note-block">
+                <strong>Clé de lecture des performances (AUC) :</strong><br>
+                Le score <strong>Intra-domaine</strong> évalue le modèle sur des données similaires à son entraînement (mesure de la capacité d'apprentissage). Le score <strong>Inter-domaines (Cross-domain)</strong> l'évalue sur des générateurs inédits (mesure de la généralisation). Le différentiel entre ces deux scores quantifie directement l'<em>overfitting</em> (surapprentissage) sur les artefacts spécifiques à un générateur.
+            </div>
+
+            <table class="data-table" style="font-size: 0.85rem;">
+                <thead>
+                    <tr>
+                        <th>Modèle</th>
+                        <th>Année</th>
+                        <th>Mécanisme / Approche</th>
+                        <th>AUC (Intra-domaine)</th>
+                        <th>AUC (Inter-domaines)</th>
+                        <th>Points Forts</th>
+                        <th>Limites Algorithmiques</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Meso4</strong><br><em>(MesoNet)</em></td>
+                        <td>2018</td>
+                        <td>Classifieur CNN mésoscopique compact.</td>
+                        <td>0.6097</td>
+                        <td>0.6551</td>
+                        <td>Architecture ultralégère ; Inférence très rapide.</td>
+                        <td>Dépassé par les générateurs modernes ; faible généralisation globale.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MesoInception</strong></td>
+                        <td>2018</td>
+                        <td>CNN compact intégrant des blocs <em>Inception</em>.</td>
+                        <td>0.7571</td>
+                        <td>0.7364</td>
+                        <td>Amélioration notable par rapport à Meso4 tout en restant efficient.</td>
+                        <td>Repose sur des hypothèses d'artefacts obsolètes.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Xception</strong><br><em>(Baseline)</em></td>
+                        <td>2019</td>
+                        <td>Réseau de neurones convolutif profond (Xception backbone).</td>
+                        <td>0.9450</td>
+                        <td>0.7718</td>
+                        <td><em>Baseline</em> extrêmement robuste et massivement utilisée.</td>
+                        <td>Chute drastique des performances en configuration <em>cross-domain</em>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EfficientNet-B4</strong></td>
+                        <td>2019</td>
+                        <td>Classifieur CNN optimisé (EfficientNet backbone).</td>
+                        <td>0.9389</td>
+                        <td>0.7718</td>
+                        <td>Forte efficience paramétrique ; excellentes performances locales.</td>
+                        <td>Vulnérabilité inter-domaines similaire à Xception.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Capsule</strong><br><em>(Forensics)</em></td>
+                        <td>2019</td>
+                        <td>Représentation forensique basée sur les réseaux capsules (CapsNets).</td>
+                        <td>0.8217</td>
+                        <td>0.7488</td>
+                        <td>Biais inductif alternatif intéressant face aux CNN classiques.</td>
+                        <td>Lourdeur computationnelle ; dégradation sévère hors domaine.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FWA</strong><br><em>(DSP-FWA)</em></td>
+                        <td>2019</td>
+                        <td>Détection des artefacts de déformation (<em>warping</em>) et de fusion (<em>blending</em>).</td>
+                        <td>0.8549</td>
+                        <td>0.7239</td>
+                        <td>Piste des artefacts interprétables ; fort sur les pipelines de <em>Face Swap</em>.</td>
+                        <td>Très fragile face aux pipelines de génération de nouvelle génération.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Face X-ray</strong></td>
+                        <td>2020</td>
+                        <td>Modélisation des frontières de fusion via des cartes de type "rayons X".</td>
+                        <td>0.9391</td>
+                        <td>0.6985</td>
+                        <td>Cartographie interprétable ciblée sur les signatures de composition (compositing).</td>
+                        <td>Effondrement <em>cross-domain</em> sur DBench ; extrême sensibilité à l'implémentation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F3-Net</strong></td>
+                        <td>2020</td>
+                        <td>Détection fréquentielle (signaux spectraux / Transformée DCT).</td>
+                        <td>0.9449</td>
+                        <td>0.7645</td>
+                        <td>Exploitation redoutable des artefacts spectraux en intra-domaine.</td>
+                        <td>Vulnérable aux post-traitements adaptatifs (filtres, re-compression).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SPSL</strong></td>
+                        <td>2021</td>
+                        <td>Apprentissage des spectres de phase et de fréquence spatiale.</td>
+                        <td>0.9408</td>
+                        <td><strong>0.7875</strong></td>
+                        <td>Meilleur score <em>cross-domain</em> parmi les <em>baselines</em> fréquentielles étudiées.</td>
+                        <td>Sensible aux contre-mesures adversaires agissant sur le domaine fréquentiel.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SRM</strong></td>
+                        <td>2021</td>
+                        <td>Modélisation du bruit et des résidus (haute fréquence).</td>
+                        <td>0.9359</td>
+                        <td>0.7760</td>
+                        <td>Compétitif en inter-domaines ; isole efficacement les signaux résiduels.</td>
+                        <td>Fortement dépendant des codecs vidéo utilisés lors de l'attaque.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CORE</strong></td>
+                        <td>2022</td>
+                        <td>Analyse des signaux d'effacement/reconstruction couplée à la modélisation spatiale.</td>
+                        <td>0.9431</td>
+                        <td>0.7694</td>
+                        <td>Excellente robustesse face à des manipulations spécifiques.</td>
+                        <td>Incapacité à combler l'écart de généralisation <em>cross-domain</em>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RECCE</strong></td>
+                        <td>2022</td>
+                        <td>Exploitation de signaux de reconstruction spatiale.</td>
+                        <td>0.9422</td>
+                        <td>0.7649</td>
+                        <td>Dépasse le paradigme de simple classification pour analyser la reconstruction.</td>
+                        <td>Nécessite un processus d'entraînement particulièrement minutieux.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p style="margin-top: 15px; font-size: 0.9rem;">
+                <em>Ce tableau démontre un phénomène systémique inquiétant : bien que l'état de l'art (SOTA) soit parvenu à saturer les métriques intra-domaine (frôlant les 95% d'AUC dès 2019 avec Xception), presque aucun algorithme, qu'il soit spatial ou fréquentiel, ne parvient à franchir la barrière des 80% d'AUC lorsqu'il est confronté à des architectures génératives absentes de son corpus d'apprentissage initial.</em>
+            </p>
+        </section>
+
+
+        <h3 style="margin-top: 50px;">10.1 Le Tournant Multimodal : L'analyse de la synchronisation (2023-2025)</h3>
+            
+            <p>La meme revue (<a href="https://www.mdpi.com/2078-2489/17/4/347" target="_blank">https://www.mdpi.com/2078-2489/17/4/347</a>.)nous présente des solutions multmodal (audio - vidéo). La différence fondamentale réside dans le paradigme d'analyse : plutôt que de traquer un artefact de pixel isolé, ces modèles traquent la <em>physique comportementale</em>. Un modèle génératif peut générer un visage parfait et une voix parfaite de manière isolée, mais synchroniser la biométrie faciale avec la sémantique de la parole (lip-sync, micro-expressions) reste mathématiquement extrêmement complexe.</p>
+
+            <table class="data-table" style="font-size: 0.85rem;">
+                <thead>
+                    <tr>
+                        <th>Modèle</th>
+                        <th>Année</th>
+                        <th>Modalité</th>
+                        <th>Mécanisme / Approche</th>
+                        <th>Points Forts</th>
+                        <th>Limites Algorithmiques</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Self-Supervised Video Forensics</strong></td>
+                        <td>2023</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Détection d'anomalies basée uniquement sur des données réelles (modélisation de la synchronisation AV).</td>
+                        <td>Évite la dépendance aux données d'entraînement générées (faux) ; excellente robustesse conceptuelle.</td>
+                        <td>Limité aux scènes de "visages parlants" (talking heads) ; ignore les indices comportementaux plus larges.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Watch Those Words</strong></td>
+                        <td>2023</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Mouvement facial conditionné par les mots via les Unités d'Action (AU) et les mouvements de tête.</td>
+                        <td>Interprétable. Dépasse la simple synchro labiale en modélisant la compatibilité expression/parole.</td>
+                        <td>Nécessite un visage et un discours clairs ; la dynamique propre à chaque individu limite la généralisation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>POI-Forensics</strong></td>
+                        <td>2023</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Vérification d'identité audio-visuelle contrastive ciblée sur les "Personnes d'Intérêt" (POI).</td>
+                        <td>Idéal pour protéger des cibles de grande valeur (politiciens, PDG) via une vérification centrée sur l'identité.</td>
+                        <td>Présuppose de posséder des données de référence (voix/vidéo) de la cible. Inefficace sur des inconnus.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AVFF</strong></td>
+                        <td>2024</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Apprentissage inter-modal en deux étapes pour fusionner les caractéristiques audio-visuelles.</td>
+                        <td>Excellente <em>baseline</em> multimodale récente, conçue explicitement pour optimiser la correspondance inter-modale.</td>
+                        <td>Coût computationnel nettement supérieur aux classifieurs visuels légers.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Heterogeneous Graphs</strong></td>
+                        <td>2024</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Mécanisme d'attention sur graphes hétérogènes cartographiant les relations intra et inter-modales.</td>
+                        <td>Capable de réaliser un triage chirurgical : indique si le deepfake concerne l'audio, la vidéo, ou les deux.</td>
+                        <td>Pipeline d'ingénierie complexe ; difficile à évaluer sur des benchmarks purement visuels traditionnels.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ART-AVDF</strong></td>
+                        <td>2024</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Apprentissage des représentations articulatoires liant la parole au mouvement labial.</td>
+                        <td>Traque des indices fondés sur les lois de la physique humaine (physiologiquement ancrés).</td>
+                        <td>Utile principalement sur les vidéos en plan rapproché avec locuteur actif.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Talking Heads Biometrics</strong></td>
+                        <td>2025</td>
+                        <td>Audio + Vidéo</td>
+                        <td>Traque des anomalies biométriques faciales sous contrainte de mouvements ou d'expressions complexes.</td>
+                        <td>Hautement pertinent face aux menaces modernes de type Avatars 3D ou clonant la voix et le visage en temps réel.</td>
+                        <td>Le périmètre est restreint à l'usurpation de type "Talking head" (hors deepfakes d'environnement ou d'action).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <section class="doc-section">
+            <h2><span class="sec-num">11.</span> Problèmes ouverts et limites actuelles</h2>
             <div class="method-label">Les défis de demain</div>
             <p>Malgré ces avancées scientifiques majeures, la communauté forensique fait face à des obstacles systémiques persistants :</p>
             
             <ul class="limit-list">
                 <li><strong>Le mur de la généralisation "Cross-Generator" :</strong> C'est le défi numéro un. Les recherches sur GenVidBench prouvent qu'un détecteur très performant sur les vidéos d'un générateur A voit souvent sa précision chuter brutalement (parfois sous les 60%) s'il est confronté aux vidéos d'un générateur B inédit. Les détecteurs peinent à extraire une définition universelle du "faux".</li>
-                <li><strong>Une course de plus en plus inégale :</strong> Une étude empirique récente alerte sur le retard de la détection face à la génération (Diffusion, NeRF). Fait notable : l'œil humain — particulièrement celui d'utilisateurs familiers avec l'IA — parvient aujourd'hui à mieux déceler les deepfakes modernes que certains algorithmes sur-entraînés, en détectant des incohérences sémantiques ou physiques globales que la machine ignore.</li>
-                <li><strong>La question des biais algorithmiques :</strong> Si les générateurs peuvent perpétuer des biais, les détecteurs s'avèrent paradoxalement équitables sur un point précis. Des études récentes ont prouvé que les détecteurs d'images ne présentent pas de biais systématique de détection basé sur l'âge, le genre ou l'ethnie, car ils traquent des anomalies statistiques de bas niveau (pixels, fréquences) décorrélées des phénotypes humains.</li>
+                <li><strong>Une course de plus en plus inégale :</strong> Une étude empirique récente (<a href="https://arxiv.org/abs/2602.07986" target="_blank">https://arxiv.org/abs/2602.07986</a>) alerte sur le retard de la détection face à la génération (Diffusion, NeRF). Fait notable : l'œil humain — particulièrement celui d'utilisateurs familiers avec l'IA — parvient aujourd'hui à mieux déceler les deepfakes modernes que certains algorithmes sur-entraînés, en détectant des incohérences sémantiques ou physiques globales que la machine ignore.</li>
                 <li><strong>Attaques adversaires et post-traitement :</strong> L'ajout intentionnel de bruit, le redimensionnement, ou le ré-encodage agressif d'une vidéo manipulée restent des moyens efficaces pour "laver" les traces algorithmiques et contourner la majorité des détecteurs actuels.</li>
             </ul>
         </section>
@@ -349,6 +652,23 @@ Voici le lien d'une page github qui recence l'état de l'art des modèles de gé
     <div class="wrap">
         <div class="veille-grid">
 
+            <article class="veille-item">
+    <h2>A Review of Tools and Technologies to Combat Deepfakes</h2>
+    <div class="veille-meta">D. Erokhin & N. Komendantova (MDPI Information, 2026)</div>
+    
+    <h4>Résumé</h4>
+    <p>Cette publication propose une méta-analyse exhaustive des contre-mesures actuelles face à la prolifération des médias synthétiques. Plutôt que de se limiter à l'approche purement algorithmique, les auteurs structurent la défense forensique en trois piliers interconnectés : la détection passive (traque des artefacts spatio-temporels), la traçabilité active (intégration cryptographique de métadonnées) et le tatouage numérique (watermarking injecté dès la génération). L'étude intègre également une réflexion poussée sur les cadres juridiques récents, notamment l'AI Act européen et le Digital Services Act (DSA).</p>
+    
+    <h4>Intérêt pour la détection</h4>
+    <p>L'apport fondamental de cette revue est de démontrer l'obsolescence d'une stratégie strictement défensive. Face à l'adaptabilité des attaquants (robustesse adversaire), l'article plaide pour une « défense en profondeur ». Il met en exergue l'importance vitale des standards de provenance (comme la norme C2PA) pour authentifier l'origine du média avant même d'avoir recours à un modèle de détection probabiliste. Ce papier offre une excellente vision systémique unissant l'apprentissage automatique, la cryptographie et la régulation politique.</p>
+
+    <h4>Limites identifiées</h4>
+    <p>S'agissant d'un article de synthèse scientifique (Review), il n'introduit pas de nouvelle architecture mathématique inédite. Par ailleurs, les auteurs soulignent objectivement que les solutions proactives louées (C2PA et watermarking) se heurtent encore à des défis de passage à l'échelle (scalabilité) colossaux, et restent structurellement vulnérables aux modèles de génération open-source non régulés.</p>
+    
+    <div class="source-ref" style="margin-top: 20px; font-family: var(--mono); font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 10px;">
+        Source : <em>A Review of Tools and Technologies to Combat Deepfakes</em>
+    </div>
+</article>
             <article class="doc-section veille-item">
                 <h2>1. STGT: Spatio-Temporal Graph Transformer</h2>
                 <div class="veille-meta">A. Pandey, A. Solanki (Signal, Image and Video Processing, 2026)</div>
